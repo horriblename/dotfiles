@@ -1,0 +1,8 @@
+{
+   "hello": {
+      "prefix": "print",
+      "body": [
+         "System.out.println()"
+      ]
+   }
+}

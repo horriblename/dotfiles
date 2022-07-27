@@ -1,0 +1,36 @@
+# h. CLI utils
+ansible
+bat
+btop
+catdoc
+cpupower
+delve
+docx2txt
+dust
+fd
+fzf
+github-cli
+glow
+gnuplot
+gopls
+interception-caps2esc
+lazygit
+lf # chaotic-aur
+lolcat
+ly
+nix
+pacman-contrib
+pandoc
+ripgrep
+rsync
+shellcheck
+snapper
+stow
+texlive-core
+trash-cli
+zsh
+zsh-autosuggestions
+zsh-completions
+zsh-syntax-highlighting
+zsh-theme-powerlevel10k
+#grml-zsh-config

@@ -1,0 +1,20 @@
+source /home/py/.config/lf/lfrc
+# Basic Settings
+set previewer /home/py/.config/lf/sudo-preview
+set cleaner /home/py/.config/lf/cleaner
+set drawbox true
+
+# Movement
+map gtr cd /home/py/.local/share/Trash/files
+map gh cd /home/py
+map gd cd /home/py/Documents
+map gD cd /home/py/Downloads
+map gp cd /home/py/Pictures
+map gm cd /home/py/Music
+map gs cd /home/py/scripts
+map gc cd /home/py/.config
+map gn cd /home/py/Nextcloud
+map gj cd /home/py/jail
+map gr cd /home/py/repo
+map gl cd /home/py/.local
+

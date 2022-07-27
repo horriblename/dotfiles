@@ -1,0 +1,16 @@
+# d. GUI - wayland (and sway)
+autotiling # chaotic-aur
+clipman # chaotic-aur
+foot
+#sway
+#sway-nvidia
+swaybg
+swayidle
+swaylock
+waybar
+wl-clipboard
+wofi
+xorg-xwayland
+
+# swayfire
+swayfire-git # chaotic-aur

@@ -1,0 +1,61 @@
+# a. General
+arch-install-scripts
+base
+#bind
+diffutils
+#dhclient  # optional for networkmanager
+#dhcpcd  # optional for networkmanager
+#dosfstools # for ntfs?
+efibootmgr
+exfatprogs
+git
+grub
+grub-btrfs
+#iptables-nft # required by libvirt, I think
+#iwd # for wireless networkmanager
+linux
+linux-firmware
+linux-zen
+linux-zen-headers
+man-db
+man-pages
+mkinitcpio
+#mtools # optional for grub; ms-dos related
+neovim
+networkmanager
+openconnect
+openssh
+os-prober
+pacmanfile
+parted
+systemd-resolvconf
+terminus-font
+unrar
+wget
+zip
+
+## Group base-devel
+autoconf
+automake
+binutils
+bison
+fakeroot
+file
+findutils
+flex
+gawk
+gcc
+gettext
+grep
+groff
+gzip
+libtool
+m4
+make
+pacman
+patch
+pkgconf
+sed
+sudo
+texinfo
+which

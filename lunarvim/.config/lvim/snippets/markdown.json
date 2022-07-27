@@ -1,0 +1,26 @@
+{
+   "Box Drawing Upper-left": {
+      "prefix": "box-up-left",
+      "body": [
+         "System.out.println()"
+      ]
+   },
+   "Box Drawing Upper-right": {
+      "prefix": "box-up-right",
+      "body": [
+         "System.out.println()"
+      ]
+   },
+   "Box Drawing Down-left": {
+      "prefix": "box-down-left",
+      "body": [
+         "System.out.println()"
+      ]
+   },
+   "Box Drawing Down-right": {
+      "prefix": "box-down-right",
+      "body": [
+         "System.out.println()"
+      ]
+   }
+}

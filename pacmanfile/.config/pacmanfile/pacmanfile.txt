@@ -1,0 +1,27 @@
+polkit
+swi-prolog
+#swhkd-git
+mprocs # aur
+bitwarden-cli
+kteatime
+nsxiv
+cosmic-comp-git
+
+jdk-openjdk
+
+# i3 plasma
+i3-gaps
+feh
+dmenu
+rofi
+picom
+uni
+
+
+#snapper-gui-git # chaotic-aur
+
+# for testing
+xterm
+alacritty
+mlterm
+ranger
