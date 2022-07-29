@@ -1,10 +1,10 @@
 #! /usr/bin/env lua
 --=====================================================================
 --
--- z.lua - a cd command that learns, by skywind 2018, 2019, 2020
+-- z.lua - a cd command that learns, by skywind 2018-2022
 -- Licensed under MIT license.
 --
--- Version 1.8.7, Last Modified: 2020/06/29 18:04
+-- Version 1.8.16, Last Modified: 2022/07/21 22:12
 --
 -- * 10x faster than fasd and autojump, 3x faster than z.sh
 -- * available for posix shells: bash, zsh, sh, ash, dash, busybox
@@ -49,9 +49,9 @@
 --         source (lua /path/to/z.lua --init fish | psub)
 --
 -- Power Shell Install:
---
 --     * put something like this in your config file:
---         iex ($(lua /path/to/z.lua --init powershell) -join "`n")
+--         Invoke-Expression (& { 
+--           (lua /path/to/z.lua --init powershell) -join "`n" })
 --
 -- Windows Install (with Clink):
 --     * copy z.lua and z.cmd to clink's home directory
@@ -62,6 +62,10 @@
 --     * copy z.lua and z.cmd to cmder/vendor
 --     * Add cmder/vendor to %PATH%
 --     * Ensure that "lua" can be called in %PATH%
+--
+-- Windows WSL-1:
+--     * Install lua-filesystem module before init z.lua:
+--         sudo apt-get install lua-filesystem
 --
 -- Configure (optional):
 --   set $_ZL_CMD in .bashrc/.zshrc to change the command (default z).
@@ -523,13 +527,16 @@ function os.path.abspath(path)
 				return test
 			end
 		end
-		for _, python in pairs({'python', 'python2', 'python3'}) do
+		for _, python in pairs({'python3', 'python2', 'python'}) do
 			local s = 'sys.stdout.write(os.path.abspath(sys.argv[1]))'
 			local s = '-c "import os, sys;' .. s .. '" \'' .. path .. '\''
 			local s = python .. ' ' .. s
 			local test = os.path.which(python)
 			if test ~= nil and test ~= '' then
-				return os.call(s)
+				test = os.call(s)
+				if test ~= nil and test ~= '' then
+					return test
+				end
 			end
 		end
 	end
@@ -576,7 +583,7 @@ function os.path.exists(name)
 	end
 	local ok, err, code = os.rename(name, name)
 	if not ok then
-		if code == 13 then
+		if code == 13 or code == 17 then
 			return true
 		elseif code == 30 then
 			local f = io.open(name,"r")
@@ -1627,7 +1634,7 @@ function z_cd(patterns)
 	elseif Z_INTERACTIVE == 2 then
 		local fzf = os.environ('_ZL_FZF', 'fzf')
 		local tmpname = '/tmp/zlua.txt'
-		local cmd = '--nth 2.. --reverse --inline-info --tac '
+		local cmd = '--nth 2.. --reverse --info=inline --tac '
 		local flag = os.environ('_ZL_FZF_FLAG', '')
 		flag = (flag == '' or flag == nil) and '+s -e' or flag
 		cmd = ((fzf == '') and 'fzf' or fzf)  .. ' ' .. cmd .. ' ' .. flag
@@ -1848,7 +1855,7 @@ function cd_breadcrumbs(pwd, interactive)
 		retval = io.read('*l')
 	elseif interactive == 2 then
 		local fzf = os.environ('_ZL_FZF', 'fzf')
-		local cmd = '--reverse --inline-info --tac '
+		local cmd = '--reverse --info=inline --tac '
 		local flag = os.environ('_ZL_FZF_FLAG', '')
 		flag = (flag == '' or flag == nil) and '+s -e' or flag
 		cmd = ((fzf == '') and 'fzf' or fzf) .. ' ' .. cmd .. ' ' .. flag
@@ -2059,6 +2066,7 @@ end
 -----------------------------------------------------------------------
 function z_clink_init()
 	local once = os.environ("_ZL_ADD_ONCE", false)
+	local _zl_clink_prompt_priority = os.environ('_ZL_CLINK_PROMPT_PRIORITY', 99)
 	local previous = ''
 	function z_add_to_database()
 		pwd = clink.get_cwd()
@@ -2070,7 +2078,7 @@ function z_clink_init()
 		end
 		z_add(clink.get_cwd())
 	end
-	clink.prompt.register_filter(z_add_to_database, 99)
+	clink.prompt.register_filter(z_add_to_database, _zl_clink_prompt_priority)
 	function z_match_completion(word)
 		local M = z_match({word}, Z_METHOD, Z_SUBDIR)
 		for _, item in pairs(M) do
@@ -2080,6 +2088,8 @@ function z_clink_init()
 	end
 	local z_parser = clink.arg.new_parser()
 	z_parser:set_arguments({ z_match_completion })
+	z_parser:set_flags("-c", "-r", "-i", "--cd", "-e", "-b", "--add", "-x", "--purge", 
+		"--init", "-l", "-s", "--complete", "--help", "-h")
 	clink.arg.register_parser("z", z_parser)
 end
 
@@ -2244,7 +2254,8 @@ fi
 -----------------------------------------------------------------------
 -- initialize bash/zsh
 ----------------------------------------------------------------------
-function z_shell_init(opts) print('ZLUA_SCRIPT="' .. os.scriptname() .. '"')
+function z_shell_init(opts)
+	print('ZLUA_SCRIPT="' .. os.scriptname() .. '"')
 	print('ZLUA_LUAEXE="' .. os.interpreter() .. '"')
 	print('')
 	if not opts.posix then
@@ -2276,7 +2287,7 @@ function z_shell_init(opts) print('ZLUA_SCRIPT="' .. os.scriptname() .. '"')
 		end
 		print(script_complete_bash)
 		if opts.fzf ~= nil then
-			fzf_cmd = "fzf --nth 2.. --reverse --inline-info --tac "
+			fzf_cmd = "fzf --nth 2.. --reverse --info=inline --tac "
 			local height = os.environ('_ZL_FZF_HEIGHT', '35%')
 			if height ~= nil and height ~= '' and height ~= '0' then
 				fzf_cmd = fzf_cmd .. ' --height ' .. height .. ' '
@@ -2501,6 +2512,11 @@ if /i "%1"=="-x" (
 	shift /1
 	goto parse
 )
+if /i "%1"=="--add" (
+	set "RunMode=--add"
+	shift /1
+	goto parse
+)
 if "%1"=="-i" (
 	set "InterMode=-i"
 	shift /1
@@ -2539,12 +2555,22 @@ if /i "%RunMode%"=="-n" (
 			pushd !NewPath!
 			pushd !NewPath!
 			endlocal
-			popd
+			goto popdir
 		)
 	)
 )	else (
 	call "%LuaExe%" "%LuaScript%" "%RunMode%" %MatchType% %StrictSub% %InterMode% %StripMode% %*
 )
+goto end
+:popdir
+popd
+setlocal
+set "NewPath=%CD%"
+set "CDCmd=cd /d"
+if /i not "%_ZL_CD%"=="" (
+	set "CDCmd=%_ZL_CD%"
+)
+endlocal & popd & %CDCmd% "%NewPath%"
 :end
 ]]
 
@@ -2728,4 +2754,5 @@ if not pcall(debug.getlocal, 4, 1) then
 	end
 end
 
+-- vim: set ts=4 sw=4 tw=0 noet :
 
