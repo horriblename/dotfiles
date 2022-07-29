@@ -59,6 +59,7 @@ lvim.keys.normal_mode["<A-9>"] = ":BufferLineLast<cr>"
 lvim.builtin.which_key.opts.noremap = false
 lvim.builtin.which_key.mappings['h'] = ":split<CR>"
 lvim.builtin.which_key.mappings['L']['L'] = { ":lua lvim.", "More options..." }
+lvim.builtin.which_key.mappings['f'] = { ":lua require('telescope.builtin').fd { follow = true }<cr>", "Find File" }
 lvim.builtin.which_key.mappings['S'] = {
    name = "Session",
    c = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
@@ -67,6 +68,10 @@ lvim.builtin.which_key.mappings['S'] = {
 }
 lvim.builtin.which_key.mappings['s']['p'] = { ":Telescope projects<CR>", "Recent Projects" }
 lvim.builtin.which_key.mappings['P'] = { ":PasteImage<CR>", "Paste Image" }
+vim.cmd 'nunmap <leader>v'
+vim.cmd 'nunmap <leader>h'
+lvim.builtin.which_key.mappings['v'] = { ':FocusSplitRight<CR>', "Split to Right" }
+lvim.builtin.which_key.mappings['h'] = { ':FocusSplitDown<CR>', "Split to Below" }
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
@@ -85,7 +90,7 @@ lvim.builtin.notify.active = true
 lvim.builtin.nvimtree.setup = {
    disable_netrw = false,
    hijack_netrw = false,
-   openontab = true,
+   open_on_tab = true,
    view = {
       side = "left",
       mappings = {

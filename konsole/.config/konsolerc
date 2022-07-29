@@ -21,10 +21,10 @@ ShowWindowTitleOnTitleBar=true
 UseSingleInstance=true
 
 [MainWindow]
-HDMI-1 Height 1920x1080=1021
+HDMI-1 Height 1920x1080=1018
 HDMI-1 Width 1920x1080=1904
 HDMI-1 XPosition 1920x1080=8
-HDMI-1 YPosition 1920x1080=49
+HDMI-1 YPosition 1920x1080=52
 HDMI-2 Height 1920x1080=1058
 HDMI-2 Width 1920x1080=1920
 HDMI-2 Window-Maximized 1920x1080=true

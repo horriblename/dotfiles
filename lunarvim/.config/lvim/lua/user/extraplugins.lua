@@ -148,5 +148,13 @@ lvim.plugins = {
          vim.cmd('command! PasteImage :call mdip#MarkdownClipboardImage()<CR>')
          vim.g.mdip_imgdir = 'attachments'
       end,
-   }
+   },
+   {
+      'beauwilliams/focus.nvim',
+      cmd = 'Focus*',
+      module = 'focus',
+      config = function()
+         require('focus').setup()
+      end
+   },
 }

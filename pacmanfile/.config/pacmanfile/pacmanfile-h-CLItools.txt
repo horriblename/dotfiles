@@ -27,6 +27,7 @@ shellcheck
 snapper
 stow
 texlive-core
+topgrade
 trash-cli
 zsh
 zsh-autosuggestions

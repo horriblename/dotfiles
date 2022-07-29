@@ -6,6 +6,8 @@ bitwarden-cli
 kteatime
 nsxiv
 cosmic-comp-git
+uni
+dia
 
 jdk-openjdk
 
@@ -15,7 +17,6 @@ feh
 dmenu
 rofi
 picom
-uni
 
 
 #snapper-gui-git # chaotic-aur
@@ -23,5 +24,6 @@ uni
 # for testing
 xterm
 alacritty
-mlterm
 ranger
+ffmpegthumbnailer
+epub-thumbnailer-git
