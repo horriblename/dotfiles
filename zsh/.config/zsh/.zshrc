@@ -28,12 +28,15 @@ alias xtprc="~/scripts/disable-touchpad-right-click.sh"
 alias pf=paleofetch
 alias n="$EDITOR"
 alias nn="$EDITOR ./"
+alias cd='pushd -q'
+alias dirs='dirs -p'
 alias nl="lvim"
 alias nv="glvim"
 alias lg="lazygit"
 alias cc="calcurse"
 alias bat="bat --decorations=never"
 alias o=xdg-open
+alias ze='z -e'
 
 # package management
 alias inst='paru -S'
@@ -46,6 +49,8 @@ export GTK_THEME=Breeze # Adwaita:dark
 
 # Enable colors and change prompt:
 autoload -U colors && colors
+
+setopt PUSHD_SILENT PUSHD_IGNORE_DUPS
 
 # History in cache directory:
 HISTSIZE=1000
@@ -82,10 +87,10 @@ bindkey '^v' edit-command-line
 autoload -U edit-command-line && zle -N edit-command-line && bindkey -M vicmd "^v" edit-command-line
 
 # Use vim keys in tab complete menu:
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
+#bindkey -M menuselect '^h' vi-backward-char
+bindkey -M menuselect '^j' vi-down-line-or-history
+bindkey -M menuselect '^k' vi-up-line-or-history
+#bindkey -M menuselect '^l' vi-forward-char
 bindkey -M menuselect 'left' vi-backward-char
 bindkey -M menuselect 'down' vi-down-line-or-history
 bindkey -M menuselect 'up' vi-up-line-or-history
@@ -164,6 +169,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 # Search repos for programs that can't be found
 #source /usr/share/doc/pkgfile/command-not-found.zsh 2>/dev/null
 
+_ZL_CD=pushd
 eval "$(lua ~/scripts/z.lua --init zsh enhanced)"
 
 # Power level 10k prompt
