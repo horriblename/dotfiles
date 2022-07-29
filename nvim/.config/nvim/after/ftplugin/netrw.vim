@@ -29,21 +29,12 @@ nmap <buffer> <silent>  .   :<C-U>call netrw#Call("NetrwHidden", 1)<CR>
 nmap <buffer> <silent> r :call netrw#Call("NetrwLocalRename", getcwd())<CR>
 " nmap <buffer> <silent> r :call netrw#Call("NetrwLocalRename", netrw#Call('NetrwGetWord'))<CR>
 nmap <buffer> <silent> R :<C-U>let g:netrw_sort_direction= (g:netrw_sort_direction =~# 'n')? 'r' : 'n'<bar>e<CR>
+nmap <buffer> Z :Z 
 
 
 "  --------------- "
 "  Statusline
 "  -------------- "
-function! NetrwNumOfMarked()
-   let marked=netrw#Expose("netrwmarkfilelist")
-   if type(marked) != type([]) || len(marked) == 0
-      return ""
-   endif
-
-   return ' '.len(marked).' '
-endfunction
-
-" Note: an autocommand that triggers on buffer enter
 setlocal statusline=%f\ %=
 setlocal statusline+=%#netrwMarkFile#
 setlocal statusline+=%{NetrwNumOfMarked()}
@@ -68,13 +59,13 @@ if has('unix')
    nnoremap <buffer> <silent> <nowait> gc  <cmd>Explore ~/.config <cr>
    nnoremap <buffer> <silent> <nowait> gl  <cmd>Explore ~/.local <cr>
 
-   nnoremap <buffer> <silent> <nowait> g/  <cmd>Explore / <cr>
-   nnoremap <buffer> <silent> <nowait> gE  <cmd>Explore /etc <cr>
-   nnoremap <buffer> <silent> <nowait> gUU <cmd>Explore /usr <cr>
-   nnoremap <buffer> <silent> <nowait> gUs <cmd>Explore /usr/share <cr>
-   nnoremap <buffer> <silent> <nowait> gT  <cmd>Explore /tmp <cr>
-   nnoremap <buffer> <silent> <nowait> gM  <cmd>Explore /mnt <cr>
-   nnoremap <buffer> <silent> <nowait> gV  <cmd>Explore /var <cr>
+   nnoremap <buffer> <silent> <nowait> g/  <cmd>Explore $PREFIX/ <cr>
+   nnoremap <buffer> <silent> <nowait> gE  <cmd>Explore $PREFIX/etc <cr>
+   nnoremap <buffer> <silent> <nowait> gUU <cmd>Explore $PREFIX/usr <cr>
+   nnoremap <buffer> <silent> <nowait> gUs <cmd>Explore $PREFIX/usr/share <cr>
+   nnoremap <buffer> <silent> <nowait> gT  <cmd>Explore $PREFIX/tmp <cr>
+   nnoremap <buffer> <silent> <nowait> gM  <cmd>Explore $PREFIX/mnt <cr>
+   nnoremap <buffer> <silent> <nowait> gV  <cmd>Explore $PREFIX/var <cr>
 
    nnoremap <buffer> <silent> <nowait> gbb <cmd>Explore /mnt/BUP <cr>
    nnoremap <buffer> <silent> <nowait> gbd <cmd>Explore /mnt/BUP/Documents_ <cr>

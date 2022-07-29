@@ -25,7 +25,6 @@ let g:Netrw_UserMaps = [
          \['mlr', 'NetrwCreateRelLink'],
          \['mlh', 'NetrwCreateHardLink'],
          \['P', 'NetrwTogglePreviewMode'],
-         \['Z', 'NetrwZluaTo']
          \] " relevant functions are decalred below
 
 hi! link netrwMarkFile WildMenu
@@ -161,7 +160,11 @@ function! NetrwCreateLink(options)
    call NetrwResetPasteOperation(1)
 
    for file in marked
-      call system(baseCmd.a:options." '".file."' '".getcwd()."'")
+      let file = escape(file, "'")
+      let err = system(baseCmd.a:options." '".file."' '".getcwd()."'")
+      if !empty(err)
+         echoerr "Error creating symlink for ".file.': '.err
+      endif
    endfor
 endfunction
 
@@ -214,18 +217,15 @@ function! NetrwTogglePreviewMode(isLocal)
    endif
 endfunction
 
-" ------------------ "
-" z.lua integration
-" -------------------"
-function! NetrwZluaTo(isLocal)
-   call inputsave()
-   let pattern = input('zlua: where to? ')
-   call inputrestore()
-   if pattern == ""
+"  --------------- "
+"  For Statusline defined in ftplugin
+"  --------------- "
+function! NetrwNumOfMarked()
+   let marked=netrw#Expose("netrwmarkfilelist")
+   if type(marked) != type([]) || len(marked) == 0
       return ""
    endif
 
-   " z.lua must be in ~/.config/nvim/lua/ or in any of the vim
-   " <runtimepath>/lua/ directories
-   execute "Explore" luaeval('require("z").z_cd({_A.pattern})', {'pattern' : pattern})
+   return ' '.len(marked).' '
 endfunction
+

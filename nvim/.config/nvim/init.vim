@@ -9,6 +9,13 @@ else
    set clipboard=unnamed
 endif
 
+fu! s:mapIfEmpty(prefix, lhs, rhs)
+   if maparg(a:lhs, a:prefix)
+      return
+   endif
+   execute a:prefix.'map '.a:lhs.' '.a:rhs
+endfu
+
 " Remove trailing whitespace on save
 "autocmd BufWritePre * %s/\s\+$//e
 
@@ -30,13 +37,11 @@ vnoremap <S-Tab>  <gv
 noremap! <C-h> <C-w>
 noremap! <C-backspace> <C-w>
 
-tnoremap <C-S-Esc> <C-\><C-n>
+tnoremap <M-C-N> <C-\><C-n>
+tnoremap <M-C-V> <cmd>put "<CR>
 
 noremap H ^
 noremap L g_
-
-inoremap <c-r><c-r> <c-r>=
-cnoremap <c-r><c-r> <c-r>=
 
 " surround with parenthesis. Using register "z to not interfere with clipboard
 xmap S <Nop>
@@ -51,8 +56,8 @@ xnoremap S' "zs'<c-r>z'<Esc>
 xnoremap S` "zs`<c-r>z`<Esc>
 
 " neovide/gui frontend fixes and enhancements
-nnoremap <C-n>    :tabnext<CR>
-nnoremap <C-p>    :tabprevious<CR>
+nnoremap <M-,>    :tabnext<CR>
+nnoremap <M-.>    :tabprevious<CR>
 nnoremap <C-Tab>    :tabnext<CR>
 nnoremap <C-S-Tab>  :tabprevious<CR>
 inoremap <C-Tab>    <Esc>:tabnext<CR>
@@ -61,17 +66,18 @@ tnoremap <C-Tab>    <C-\><C-n>:tabnext<CR>
 tnoremap <C-S-Tab>  <C-\><C-n>:tabprevious<CR>
 
 noremap <F1> <Esc>
-
+noremap! <C-j> <C-n>
 
 " Shortcutting split opening
-nnoremap <leader>h :split<CR>
-nnoremap <leader>v :vsplit<CR>
+call s:mapIfEmpty('nnore', '<leader>h', ':split<CR>')
+call s:mapIfEmpty('nnore', '<leader>v', ':vsplit<CR>')
 
 " netrw (explore command)
 nnoremap <leader>e :25Lexplore<CR>
+call s:mapIfEmpty('nnore', '<silent> <leader>e', ':25Lexplore<CR>')
 
 " file finder
-nnoremap <leader>f :find 
+call s:mapIfEmpty('nnore', '<leader>f', ':find ')
 
 
 "Alias replace all to S
@@ -80,7 +86,7 @@ nnoremap S :%s##gI<Left><Left><Left>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>Q :q!
 nnoremap <leader>c :bdelete<CR>
-nnoremap <leader>w :w<CR>
+"nnoremap <leader>w :w<CR>
 nnoremap <C-s> :w<CR>
 
 " Tab control
@@ -94,7 +100,8 @@ nnoremap <leader>t      :tabnew<CR>
 nnoremap <leader>r :n#<CR>
 
 nnoremap <silent><expr> <leader>n :tabnext<CR>
-nnoremap <C-/> <cmd>nohlsearch<cr>
+nnoremap <C-/> :nohlsearch<cr>
+nnoremap <C-_> :nohlsearch<cr>
 
 " Buffer navigation
 tnoremap <A-h> <C-\><C-N><C-w>h
@@ -165,7 +172,11 @@ noremap <a-i> :<c-u>call <sid>GotoNextFloat(1)<cr>
 noremap <a-o> :<c-u>call <sid>GotoNextFloat(0)<cr>
 
 function! Zlua(pattern)
-   let zlua=expand('~/scripts/z.lua')
+   let zlua='~/scripts/z.lua'
+   if ! empty($ZLUA_SCRIPT)
+      let zlua=$ZLUA_SCRIPT
+   endif
+   let zlua=expand(zlua)
    if !filereadable(zlua)
       echoerr '~/scripts/z.lua not found'
       return
@@ -177,15 +188,21 @@ function! Zlua(pattern)
    endif
    if &ft == "netrw"
       execute "Explore" dir
+   elseif &ft == "NvimTree"
+      execute "cd" dir
    else
-      echo dir
+      return dir
    endif
 endfun
 
 function! ZluaComp(ArgLead, CmdLine, CursorPos)
-   let zlua=expand('~/scripts/z.lua')
+   let zlua='~/scripts/z.lua'
+   if ! empty($ZLUA_SCRIPT)
+      let zlua=$ZLUA_SCRIPT
+   endif
+   let zlua=expand(zlua)
    if !filereadable(zlua)
-      echoerr '~/scripts/z.lua not found'
+      echoerr 'z.lua script not found'
       return
    endif
 
@@ -194,12 +211,18 @@ function! ZluaComp(ArgLead, CmdLine, CursorPos)
    return map(l, {_, val -> substitute(val, "^[^/]*", "", "")})
 endfun
 
-command! -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
+command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
 
+command! -nargs=1 -complete=command -bar -range L botright new | term <args>
 " Save file as sudo when no sudo permissions
 command Sudowrite execute 'write ! sudo tee %' <bar> edit!
 " CDC = Change to Directory of Current file
 command CDC cd %:p:h
+
+augroup term 
+   au!
+   au BufEnter * if &buftype == 'terminal' | startinsert | endif
+augroup END
 
 " Basic settings
 set mouse=a
@@ -235,6 +258,7 @@ set noshowmode
 
 " Autocompletion
 "set wildmode=longest,list,full
+set wildmode=longest,full
 set wildmenu
 
 " keyboard layout switching
@@ -246,6 +270,8 @@ set splitbelow splitright
 
 " auto load ft plugins (vim compatibility) 
 filetype plugin on
+
+let g:markdown_folding = 1
 
 function! SourceIfExists(file)
   if filereadable(expand(a:file))
