@@ -1,4 +1,0 @@
-#!/bin/sh
-
-printf '\x1b[41;1mWarning! You are running as root!\n\x1b[0m'
-exec /home/py/.config/lf/preview $@

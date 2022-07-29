@@ -11,7 +11,7 @@ set truncatechar "…"
 set mouse on
 #set cleaner ~/.config/lf/cleaner
 
-map sudo $(sudo lf -config="$HOME/.config/lf/sudo-lfrc")
+map sudo $(sudo lf -config="$HOME/.config/lf/lfrc" -command 'set drawbox true')
 
 # Custom Functions
 cmd open ${{
@@ -41,10 +41,12 @@ cmd mkfile ${{
 }}
 
 cmd chmod %{{
-   printf "Mode Bits: "
+   IFS=$'\n'
+   if "$fx"
+   stat -c "%a \033[32mMode Bits: \033[0m" "$f"
    read ans
 
-   IFS=$'\n' chmod "$ans" $fx
+   chmod "$ans" $fx
 
    lf -remote 'send unselect'
    lf -remote 'send reload'
