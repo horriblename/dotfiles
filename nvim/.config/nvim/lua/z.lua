@@ -1,1 +1,0 @@
-/home/py/scripts/z.lua

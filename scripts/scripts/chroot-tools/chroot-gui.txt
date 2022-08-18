@@ -1,8 +1,0 @@
-#!/bin/sh
-
-xhost +localhost
-
-## then in chroot environment:
-# export DISPLAY=:0.0 (or "localhost:0"?)
-## then run command
-
