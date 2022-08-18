@@ -1,0 +1,17 @@
+# f. Drivers
+btrfs-progs
+dkms
+ntfs-3g
+openrazer-meta
+#usb_modeswitch # optional for modemmanager
+
+## nvidia proprietary
+nvidia-dkms
+nvidia-utils
+lib32-nvidia-utils
+nvtop
+
+## other drivers
+xf86-input-libinput
+xf86-video-nouveau
+xf86-video-vesa

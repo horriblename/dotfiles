@@ -1,0 +1,13 @@
+#!/bin/sh
+# [ -z ${EDITOR+x} ] will only return true if it is UNSET, empty strings count as set
+[ -z ${EDITOR+x} ] && export EDITOR="nvim"
+#source ~/.config/lf/lficons
+
+set -e
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	lf "$@"
+else
+	#~/.local/share/go/bin/lf "$@" 3>&-
+	~/repo/lf/lf -log "/tmp/lf-$$.log" "$@" 3>&-
+fi

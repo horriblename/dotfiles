@@ -1,0 +1,29 @@
+polkit
+swi-prolog
+ghcup-hs-bin
+#swhkd-git
+mprocs # aur
+bitwarden-cli
+kteatime
+nsxiv
+uni
+tofi
+
+jdk-openjdk
+
+# i3 plasma
+#i3-gaps
+#feh
+#dmenu
+#rofi
+#picom
+
+
+#snapper-gui-git # chaotic-aur
+
+# for testing
+xterm
+alacritty
+ranger
+ffmpegthumbnailer
+epub-thumbnailer-git

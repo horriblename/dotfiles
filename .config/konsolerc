@@ -1,0 +1,64 @@
+State=AAAA/wAAAAD9AAAAAAAAA5kAAAPYAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAAAAAAHABzAGUAcwBzAGkAbwBuAFQAbwBvAGwAYgBhAHIAAAAAAP////8AAAAAAAAAAA==
+StatusBar=Disabled
+eDP-1 Height 1920x1080=996
+eDP-1 Width 1920x1080=952
+eDP1 Height 1920x1080=1019
+eDP1 Width 1920x1080=921
+eDP1 XPosition 1920x1080=991
+eDP1 YPosition 1920x1080=8
+
+[Desktop Entry]
+DefaultProfile=Konsole.profile
+
+[KFileDialog Settings]
+Recent Files[$e]=file:///tmp/tmp.txt,file:///tmp/tmp.txt
+Recent URLs[$e]=file:///tmp/
+detailViewIconSize=16
+
+[KonsoleWindow]
+ShowMenuBarByDefault=false
+ShowWindowTitleOnTitleBar=true
+UseSingleInstance=true
+
+[MainWindow]
+HDMI-1 Height 1920x1080=1018
+HDMI-1 Width 1920x1080=1904
+HDMI-1 XPosition 1920x1080=8
+HDMI-1 YPosition 1920x1080=52
+HDMI-2 Height 1920x1080=1058
+HDMI-2 Width 1920x1080=1920
+HDMI-2 Window-Maximized 1920x1080=true
+HDMI-2 XPosition 1920x1080=0
+HDMI-2 YPosition 1920x1080=22
+HDMI-A-2 Window-Maximized 1920x1080=true
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAQAAAAAAAAEwAAAEAPwCAAAAAfsAAAAcAFMAUwBIAE0AYQBuAGEAZwBlAHIARABvAGMAawAAAAAAAAAEAAAAAN0BAAADAAADtwAABAAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAgAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAAAAAAD/////AAAAAAAAAAAAAAAcAHMAZQBzAHMAaQBvAG4AVABvAG8AbABiAGEAcgAAAAAA/////wAAAAAAAAAA
+StatusBar=Disabled
+ToolBarsMovable=Disabled
+WL-0 Height 950x1038=986
+WL-0 Width 950x1038=932
+eDP-1 Height 1920x1080=896
+eDP-1 Width 1920x1080=952
+eDP1 Height 1920x1080=1052
+eDP1 Width 1920x1080=1920
+eDP1 Window-Maximized 1920x1080=true
+eDP1 XPosition 1920x1080=0
+eDP1 YPosition 1920x1080=28
+
+[SaveHistory Settings]
+Recent URLs[$e]=file:///tmp
+
+[SearchSettings]
+SearchRegExpression=true
+
+[SplitView]
+SplitViewVisibility=AlwaysHideSplitHeader
+
+[TabBar]
+CloseTabOnMiddleMouseButton=true
+NewTabBehavior=PutNewTabAfterCurrentTab
+TabBarPosition=Top
+
+[UiSettings]
+ColorScheme=
+WindowColorScheme=Default

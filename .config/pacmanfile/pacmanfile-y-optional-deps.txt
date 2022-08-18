@@ -1,0 +1,6 @@
+# y. Optional dependencies that I want to keep, in comments the package
+#    requesting that package
+libnotify # firefox, foot
+lib32-gcc-libs # gcc
+
+electron19 # bitwarden, hard-dep

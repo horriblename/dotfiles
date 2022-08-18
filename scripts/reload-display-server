@@ -1,0 +1,4 @@
+#!/bin/sh
+/usr/local/bin/vfio-startup.sh
+sleep 1
+/usr/local/bin/vfio-teardown.sh
