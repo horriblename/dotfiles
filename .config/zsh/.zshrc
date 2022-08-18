@@ -37,7 +37,7 @@ alias lg="lazygit"
 alias cc="calcurse"
 alias o=xdg-open
 alias path='echo "$PATH" | sed -e "s/:/\n/g" -'
-alias ze='z -e'
+alias swayrun='swaymsg scratchpad show &&'
 
 # package management
 alias inst='paru -S'

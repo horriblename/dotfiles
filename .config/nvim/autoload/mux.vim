@@ -41,10 +41,10 @@ fu! mux#setup()
 	hi! link TabLineFill TabLine
 	hi TabLineSel ctermfg=Yellow guifg=#fabd2f
 
-	augroup TerminalMux
-		au!
-		au TermOpen * setlocal nohidden
-	augroup END
+	"augroup TerminalMux
+	"	au!
+	"	au TermOpen * setlocal nohidden
+	"augroup END
 
 	term
 
