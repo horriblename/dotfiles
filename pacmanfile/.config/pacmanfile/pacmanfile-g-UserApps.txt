@@ -1,6 +1,6 @@
 # g. User apps
 android-tools
-aniwrapper-git
+ani-cli
 bitwarden
 brave-bin # chaotic-aur
 buildah
@@ -44,7 +44,10 @@ vkd3d
 wine
 wine-gecko
 wine-mono
+xdelta3 # used by patch script for Genshin Impact
 
+grasscutter-git
+mongodb-bin
 
 # qemu/kvm
 bridge-utils

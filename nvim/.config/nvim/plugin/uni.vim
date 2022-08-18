@@ -9,9 +9,10 @@ command! -range UnicodeName
 			\| let @a = s:save
 			\| unlet s:save
 
-nmap <c-,> :UnicodeName<CR>
+nmap <c-,> :(UnicodeName)<CR>
 imap <c-,> <cmd>UnicodeName<CR>
 
+imap <c-.> :Re !uni search 
 
 " Simpler version which works on the current character only:
 " command! UnicodeName echo

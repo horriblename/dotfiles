@@ -17,6 +17,7 @@ interception-caps2esc
 lazygit
 lf # chaotic-aur
 lolcat
+lsd
 ly
 nix
 pacman-contrib
@@ -29,6 +30,7 @@ stow
 texlive-core
 topgrade
 trash-cli
+tree
 zsh
 zsh-autosuggestions
 zsh-completions

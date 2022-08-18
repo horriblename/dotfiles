@@ -2,3 +2,5 @@
 #    requesting that package
 libnotify # firefox, foot
 lib32-gcc-libs # gcc
+
+electron19 # bitwarden, hard-dep

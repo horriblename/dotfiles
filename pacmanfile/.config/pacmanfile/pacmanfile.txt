@@ -1,22 +1,22 @@
 polkit
 swi-prolog
+ghcup-hs-bin
 #swhkd-git
 mprocs # aur
 bitwarden-cli
 kteatime
 nsxiv
-cosmic-comp-git
 uni
-dia
+tofi
 
 jdk-openjdk
 
 # i3 plasma
-i3-gaps
-feh
-dmenu
-rofi
-picom
+#i3-gaps
+#feh
+#dmenu
+#rofi
+#picom
 
 
 #snapper-gui-git # chaotic-aur

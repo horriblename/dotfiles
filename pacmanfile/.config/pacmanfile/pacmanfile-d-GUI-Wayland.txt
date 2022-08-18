@@ -2,15 +2,22 @@
 autotiling # chaotic-aur
 clipman # chaotic-aur
 foot
-#sway
-#sway-nvidia
+grim
+sway
+sway-nvidia
 swaybg
 swayidle
 swaylock
-waybar
+swaymgr
+#waybar
 wl-clipboard
 wofi
+xdg-desktop-portal-wlr
 xorg-xwayland
 
 # swayfire
-swayfire-git # chaotic-aur
+#swayfire-git # chaotic-aur
+
+# hyprland
+hyprland-bin
+waybar-hyprland-git

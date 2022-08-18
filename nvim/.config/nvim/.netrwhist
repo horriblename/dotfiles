@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/tmp/nvimHPY4qX'
 let g:netrw_dirhist_4='/home/py/Documents/studies/BS'
 let g:netrw_dirhist_3='/home/py/Documents/studies/Modellierung'
 let g:netrw_dirhist_2='/home/py'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_9='/home/chingpy'
 let g:netrw_dirhist_8='/dev/cpu/0'
 let g:netrw_dirhist_7='/dev/cpu'
 let g:netrw_dirhist_6='/dev/cpu/7'
-let g:netrw_dirhist_5='/dev/cpu'

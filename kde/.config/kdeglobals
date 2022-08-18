@@ -108,8 +108,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
-DirSelectDialog Size=878,606
-History Items[$e]=file:$HOME/Music,file:$HOME/repo,file:$HOME/jail,file:$HOME/Pictures/Screenshots,file:$HOME,file:$HOME/Music,file:$HOME/Pictures,file:///mnt/BUP/Documents_,file:$HOME/Nextcloud,file:$HOME/Documents,file:$HOME/Nextcloud,file:$HOME/Nextcloud,file:$HOME/Nextcloud,file:$HOME,file:$HOME/Nextcloud,file:$HOME,file:///mnt/ext/VMs,file:$HOME/Pictures,file:///,file:///mnt/BUP/Documents_/OBS-recordings,file:///run/media/chingpy/BUP/Documents_/OBS-recordings,file:///run/media/chingpy/BUP/Documents_,file:///mnt/BUP/VMroot/iso,file:///mnt/BUP/apps/games,file:///mnt/BUP/forex/indicator_archive,file:///mnt/BUP/VMroot,file:///mnt/BUP/VMroot/arch_nextcloud,file:///mnt/BUP/VMroot/arch1,file:///mnt/BUP/VMroot/arch,file:///mnt/BUP/VMroot/androidx86,file:///mnt/BUP/VMroot/garuda,file:$HOME/Bilder
+DirSelectDialog Size=1076,720
+History Items[$e]=file:///mnt/choncc/apps/NieR - Automata,file:$HOME/Music,file:$HOME/repo,file:$HOME/jail,file:$HOME/Pictures/Screenshots,file:$HOME,file:$HOME/Music,file:$HOME/Pictures,file:///mnt/BUP/Documents_,file:$HOME/Nextcloud,file:$HOME/Documents,file:$HOME/Nextcloud,file:$HOME/Nextcloud,file:$HOME/Nextcloud,file:$HOME,file:$HOME/Nextcloud,file:$HOME,file:///mnt/ext/VMs,file:$HOME/Pictures,file:///,file:///mnt/BUP/Documents_/OBS-recordings,file:///run/media/chingpy/BUP/Documents_/OBS-recordings,file:///run/media/chingpy/BUP/Documents_,file:///mnt/BUP/VMroot/iso,file:///mnt/BUP/apps/games,file:///mnt/BUP/forex/indicator_archive,file:///mnt/BUP/VMroot,file:///mnt/BUP/VMroot/arch_nextcloud,file:///mnt/BUP/VMroot/arch1,file:///mnt/BUP/VMroot/arch,file:///mnt/BUP/VMroot/androidx86,file:///mnt/BUP/VMroot/garuda,file:$HOME/Bilder
 
 [General]
 AllowKDEAppsToRememberWindowPositions=false

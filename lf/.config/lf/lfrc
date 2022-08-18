@@ -1,3 +1,5 @@
+# vim : ft=sh
+# uses zsh for shell scripting
 # Basic Settings
 set previewer ~/.config/lf/preview
 set preview true
@@ -30,8 +32,8 @@ cmd mkdir %{{
 
 cmd shareViaNullPointer ${{
    dest=$(curl -F"file=@$f" https://0x0.st)
+   [ ! -z "$WAYLAND_DISPLAY" ] && wl-copy "$dest" || echo "$dest" | xclip -selection clipboard
    echo $dest
-   echo $dest | xclip -selection clipboard
 }}
 
 cmd mkfile ${{
@@ -42,8 +44,7 @@ cmd mkfile ${{
 
 cmd chmod %{{
    IFS=$'\n'
-   if "$fx"
-   stat -c "%a \033[32mMode Bits: \033[0m" "$f"
+   printf `stat -c "%a \033[32mMode Bits: \033[0m" "$f"`
    read ans
 
    chmod "$ans" $fx
@@ -59,8 +60,9 @@ cmd sudomkfile %{{
 }}
 
 cmd copy_location %{{
-   [[ -z "$WAYLAND_DISPLAY" ]] || wl-copy --trim-newline "$f" && exit 0
-   [[ -z "$DISPLAY" ]] || xclip -selection clipboard -rmlastnl && exit 0
+   [ ! -z "$WAYLAND_DISPLAY" ] && wl-copy --trim-newline "$f" \
+		|| echo "$f" | xclip -selection clipboard -rmlastnl
+	echo "$f"
 }}
 
 # creates a link to location (uses ABSOLUTE path) marked by copy/cut
@@ -72,30 +74,26 @@ cmd mkln ${{
    ln_targets=$(echo "$load" | sed '1d')
    link_name=""
    destination_dir="$PWD"
-   num_of_files=$(echo $ln_targets | wc -w)
-
-   if (( num_of_files == 0 ))
-   then
-      exec lf -remote 'send echo create link: no files selected'
-   fi
-   # if only one target file is given, user will be prompted to enter a link name
-   if (( num_of_files == 1 ))
-   then
-      printf "Linking to: $ln_targets\nLink Name: "
-      read link_name
-      ln "$1" "$file" "$destination_dir/$link_name"
-      lf -remote "send echo created link \033[33m$link_name\033[0m"
-      lf -remote 'send clear'
-      exit
-   fi
-
-   for file in "$ln_targets"
-   do
-      ln "$1" "$file" "$destination_dir"
-   done
-
-   lf -remote 'send echo linked "$num_of_files" files'
-   lf -remote 'send clear'
+   case "$(echo $ln_targets | wc -w)" in
+	0)	exec lf -remote 'send echo create link: no files selected' ;;
+	1)
+		printf "\033[33mLinking to:\033[0m $ln_targets\nLink Name: "
+		read link_name
+		ln $1 "$ln_targets" "$destination_dir/$link_name"
+		lf -remote "send echo created link \033[33m$link_name\033[0m -> \033[33m$ln_targets\033[0m"
+		lf -remote 'send clear'
+		exit
+	;;
+	*) {
+		echo "$ln_targets" | while IFS= read file; do
+		#for file in "$ln_targets"; do
+			printf "file is '$file'"
+			ln $1 "$file" "$destination_dir"
+		done
+		lf -remote 'send echo linked "$num_of_files" files'
+		lf -remote 'send clear'
+	} ;;
+	esac
 }}
 
 cmd fzf_jump ${{
@@ -121,12 +119,13 @@ cmd broot_jump ${{
 }}
 
 cmd grep_string ${{
-   printf "keyword: "
+   printf "\033[33mregexp: \033[0m"
    read keyword
 
    case "$1" in
       pdf) ~/scripts/grep_pdf.sh "$keyword" | bat -p --paging=always;;
-      *) grep -i -d 'skip' "$keyword" "$pwd" | bat -p --paging=always;;
+      #*) grep -i -d 'skip' "$keyword" "$pwd" | bat -p --paging=always;;
+      *) rg --smart-case "$keyword" | bat -p --paging=always;;
    esac
 }}
 
@@ -137,7 +136,7 @@ cmd z_cd %{{
 }}
 
 cmd dragon %{{
-   IFS=$'\r' dragon-drop $@ $fx
+   dragon-drop $@ "${fx[@]}"
 }}
 
 cmd dragon-curl-target &{{
@@ -202,7 +201,7 @@ cmd trash &{{
    lf -remote "send $id reload"
 
    if (( $failed == 0 )); then
-      lf -remote "send $id echo 'Finished moving to trash'"
+      lf -remote "send $id echo 'Moved to trash'"
    else
       lf -remote "send $id echo $failed files not moved to trash; last error msg"
    fi
@@ -232,7 +231,7 @@ map ?
 # File Openers
 map ee $$EDITOR "$f"
 map es $sudo -e "$f"
-map ed %IFS=$'\n' diff $fx
+map ed %IFS=$'\n' nvim -d $fx
 map I $view "$f"
 map o $(xdg-open "$f" 1>/dev/null 2>/dev/null & disown)
 map O open_with
@@ -296,6 +295,7 @@ map ?p grep_string "pdf"
 map ?? grep_string "txt"
 map du %du -h "$fx"
 map cl copy_location
+map zd calcdirsize
 map <a-h> set ratios 1:6
 map <a-l> set ratios 1:2:3
 

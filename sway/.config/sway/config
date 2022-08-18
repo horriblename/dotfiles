@@ -8,21 +8,20 @@ output * bg "/home/py/Pictures/wallpapers/dwm_3.png" fill
 
 # Your preferred terminal emulator
 set $term footclient || foot
-set $quake yakuake
+#set $quake yakuake
 set $menu wofi -I -S drun
 
 # sway better initialization
 #
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
-     dbus-update-activation-environment --systemd GTK_THEME QT_QPA_PLATFORMTHEME MOZ_ENABLE_WAYLAND && \
      dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 #exec /usr/lib/polkit-kde-authentication-agent-1
 exec /usr/lib/pam_kwallet_init
 
    ################################# Input #################################
 input "type:keyboard" {
-  xkb_layout us,de,cn
+  xkb_layout us,de
   xkb_options grp:rctrl_toggle
   repeat_delay 300
   repeat_rate 35
@@ -84,7 +83,6 @@ bindsym $mod+Control+a layout stacking
 bindsym $mod+Shift+t layout tabbed
 bindsym $mod+Shift+i layout toggle split
 bindsym $mod+Control+s move scratchpad
-bindsym $mod+s scratchpad show
 #bindsym $mod+Shift+space floating toggle
 #bindsym $mod+space focus mode_toggle
 
@@ -102,6 +100,7 @@ set $ws9 "9"
 set $ws10 "10"
 set $ws11 "11"
 set $ws12 "12"
+set $dashboard $ws6
 
 # switch to workspace
 bindsym $mod+Tab workspace next
@@ -116,6 +115,9 @@ bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
+bindsym $mod+d workspace $dashboard
+bindsym $alt+s scratchpad show
+bindsym F1 scratchpad show
 
 # move focused container to workspace
 bindsym $mod+Control+Tab move container to workspace next
@@ -146,10 +148,10 @@ bindsym $mod+Control+0 move container to workspace $ws10; workspace $ws10
 # Move workspaces betweeen monitors
 bindsym $mod+Control+m move workspace to output primary
 bindsym $mod+Control+n move workspace to output HDMI-1
-bindsym $mod+Control+l move workspace to output right
-bindsym $mod+Control+h move workspace to output left
-bindsym $mod+Control+j move workspace to output down
-bindsym $mod+Control+k move workspace to output up
+#bindsym $mod+Control+l move workspace to output right
+#bindsym $mod+Control+h move workspace to output left
+#bindsym $mod+Control+j move workspace to output down
+#bindsym $mod+Control+k move workspace to output up
 
 # Moves container to the active workspace on another screen
 bindsym $mod+Shift+Control+m move container to output primary
@@ -161,9 +163,7 @@ bindsym $mod+Shift+Control+k move container to output up
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
 # resize window (you can also use the mouse for that)
@@ -186,48 +186,75 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+bindsym $mod+Control+h resize shrink width 35 px or 5 ppt
+bindsym $mod+Control+l resize grow width 35 px or 5 ppt
+bindsym $mod+Control+j resize grow height 35 px or 5 ppt
+bindsym $mod+Control+k resize shrink height 35 px or 5 ppt
+
+set $mode_swaymgr Tiling: (s) spiral, (l) left, (m) manual
+mode "$mode_swaymgr" {
+	bindsym  s exec swaymgr -s 'set spiral'; mode "default"
+	bindsym  l exec swaymgr -s 'set left'; mode "default"
+	bindsym  m exec swaymgr -s 'set manual'; mode "default"
+
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+w mode "$mode_swaymgr"
+
    ############################ Window Management #########################
+
+for_window [workspace="scratchpad" app_id="[^(quake)]$"] floating toggle
+
+assign [app_id="quake$"] scratchpad
+for_window [app_id="quake$"] floating enable, resize set 100 ppt 55 ppt, move position 0 ppt 0 ppt, gaps outer 0
+
+assign [app_id="^sticky"] $ws6
+for_window [app_id="^sticky"] floating enable
+for_window [app_id="^sticky-scratch$"] resize set 20 ppt 25 ppt, move position 0 ppt 75 ppt
 
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="quake"] floating enable
 for_window [title="Select file"] floating enable
 
-for_window [app_id="firefox"] inhibit_idle fullscreen
 for_window [app_id="mpv"] inhibit_idle focus
 for_window [app_id="com.nextcloud.desktopclient.nextcloud"] floating enable, move position
-for_window [app_id=$quake] floating enable, move position 0 0, gaps outer 0
 for_window [app_id="pavucontrol"] floating enable 
 for_window [app_id="zenity"] floating enable, border normal
 for_window [app_id="pinentry-qt"] floating enable, border normal
-for_window [app_id="foot-scratch"] move to scratchpad
-# for_window [app_id="Element"] floating enable, resize set  width 700px,resize set height 800px
+for_window [app_id="foot-quake"] move to scratchpad
+
+for_window [app_id="firefox"] inhibit_idle
 for_window [title="Firefox — Sharing Indicator"] floating enable, move to scratchpad
 no_focus [title="Firefox — Sharing Indicator"] 
 
-for_window [class="Steam"] floating disable, move container to workspace $ws7, workspace $ws7
+assign [class="^Steam$"] $ws7
+for_window [class="^Steam$"] floating disable, move container to workspace $ws7, workspace $ws7
 for_window [class="steam_app"] move container to workspace $ws8, workspace $ws8
 for_window [workspace=$ws7] floating enable
 
-   ######################### Start external scripts ########################
+	 ######################### Start external scripts ########################
 # Status Bar
 bar swaybar_command waybar
 
 #exec swhks&
-exec_always foot --server
+exec foot --server
+exec sleep 1 && \
+     footclient --no-wait --app-id foot-quake nvim +"call mux#setup()" && \
+     footclient --no-wait --app-id sticky-scratch nvim +'set ch=1 nonu nornu' ~/Documents/stack/scratch.md
 #exec ibus-daemon -drR
-exec nextcloud
+exec nextcloud --background
 exec krunner -d
 
 # Power Management
 exec swayidle -C ~/.config/sway/swayidle.conf
 
-exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman/clipman-primary.json"
+exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
 exec clipman restore
 exec wl-paste -t text --watch clipman store
 
-# Make sure foot server is ready
-exec sleep 1 && footclient --app-id foot-scratch
-exec_always autotiling
+#exec_always autotiling
+exec_always swaymgr
 
 # General Hotkeys
 ###---Audio controls---###
@@ -242,13 +269,13 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 ###---Brightness---###
-bindsym $mod+Right exec light -A 5 && pkill -SIGRTMIN+4 i3block
-bindsym $mod+Left exec light -U 5 && pkill -SIGRTMIN+4 i3block
+# bindsym $mod+Right exec light -A 5 && pkill -SIGRTMIN+4 i3block
+# bindsym $mod+Left exec light -U 5 && pkill -SIGRTMIN+4 i3block
 
 ###---System Control---###
 bindsym XF86Sleep exec ~/.local/bin/swaysleep
-bindsym $mod+shift+z exec swaynag -t error -m "勒Reboot?"  -b 'Yes' "systemctl reboot"
-bindsym $mod+shift+x exec swaynag -t error -m " Shut Down?" -b 'Yes' "systemctl poweroff"
+bindsym $mod+shift+z exec ~/.config/sway/nag-power.sh 'reboot'
+bindsym $mod+shift+x exec ~/.config/sway/nag-power.sh 'off'
 bindsym $mod+v exec clipman pick -t wofi
 
 ###---Timer(Clock)---###
@@ -262,7 +289,6 @@ bindsym $mod+control+Print exec scrnshot fulltime
 
 # --- Terminal
 bindsym $mod+$alt+x exec $term
-bindsym F1 exec $quake
 
 ###---Launch programs---###
 bindsym $alt+Space exec $menu
@@ -270,8 +296,3 @@ bindsym $mod exec $menu
 bindsym $mod+$alt+b exec firefox
 bindsym $mod+$alt+e exec brave
 bindsym $mod+$alt+f exec dolphin
-bindsym $mod+$alt+r exec $term -e lf
-bindsym $mod+$alt+p exec $term -e btop
-bindsym $mod+$alt+v exec $term -e nvim
-bindsym $mod+$alt+u exec $term -e calcurse
-

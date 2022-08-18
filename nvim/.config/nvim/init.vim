@@ -9,18 +9,8 @@ else
    set clipboard=unnamed
 endif
 
-fu! s:mapIfEmpty(prefix, lhs, rhs)
-   if maparg(a:lhs, a:prefix)
-      return
-   endif
-   execute a:prefix.'map '.a:lhs.' '.a:rhs
-endfu
-
 " Remove trailing whitespace on save
 "autocmd BufWritePre * %s/\s\+$//e
-
-" Tip: use ctrl-v in command mode followed by key combination to see its
-" combination
 
 " Fixing unintuitive keybind behaviour
 vnoremap > >gv
@@ -42,68 +32,64 @@ tnoremap <M-C-V> <cmd>put "<CR>
 
 noremap H ^
 noremap L g_
+noremap gL g$
+noremap gH g^
 
 " surround with parenthesis. Using register "z to not interfere with clipboard
 xmap S <Nop>
-xnoremap S( "zs(<c-r>z)<Esc>
-xnoremap S) "zs(<c-r>z)<Esc>
-xnoremap S[ "zs[<c-r>z]<Esc>
-xnoremap S] "zs[<c-r>z]<Esc>
-xnoremap S{ "zs{<c-r>z}<Esc>
-xnoremap S} "zs{<c-r>z}<Esc>
-xnoremap S" "zs"<c-r>z"<Esc>
-xnoremap S' "zs'<c-r>z'<Esc>
-xnoremap S` "zs`<c-r>z`<Esc>
+xnoremap S( "zs()<Esc>"zPgvlOlO<Esc>
+xnoremap S) "zs()<Esc>"zPgvlOlO<Esc>
+xnoremap S[ "zs[]<Esc>"zPgvlOlO<Esc>
+xnoremap S] "zs[]<Esc>"zPgvlOlO<Esc>
+xnoremap S{ "zs{}<Esc>"zPgvlOlO<Esc>
+xnoremap S} "zs{}<Esc>"zPgvlOlO<Esc>
+xnoremap S< "zs<><Esc>"zPgvlOlO<Esc>
+xnoremap S> "zs<><Esc>"zPgvlOlO<Esc>
+xnoremap S" "zs""<Esc>"zPgvlOlO<Esc>
+xnoremap S' "zs''<Esc>"zPgvlOlO<Esc>
+xnoremap S` "zs``<Esc>"zPgvlOlO<Esc>
+xnoremap S* "zs**<Esc>"zPgvlOlO<Esc>
+nnoremap daa "zd%:let @z=@z[1:-2]<cr>"zP
 
-" neovide/gui frontend fixes and enhancements
-nnoremap <M-,>    :tabnext<CR>
-nnoremap <M-.>    :tabprevious<CR>
-nnoremap <C-Tab>    :tabnext<CR>
-nnoremap <C-S-Tab>  :tabprevious<CR>
-inoremap <C-Tab>    <Esc>:tabnext<CR>
-inoremap <C-S-Tab>  <Esc>:tabprevious<CR>
-tnoremap <C-Tab>    <C-\><C-n>:tabnext<CR>
-tnoremap <C-S-Tab>  <C-\><C-n>:tabprevious<CR>
-
-noremap <F1> <Esc>
+"noremap <F1> <Esc>
 noremap! <C-j> <C-n>
+noremap! <C-k> <C-p>
 
-" Shortcutting split opening
-call s:mapIfEmpty('nnore', '<leader>h', ':split<CR>')
-call s:mapIfEmpty('nnore', '<leader>v', ':vsplit<CR>')
+fu! SmartNewWin()
+	let l:whratio=4
+	let l:wininfo=getwininfo(win_getid())[0]
+	let l:h=get(l:wininfo,"height",0)
+	let l:w=get(l:wininfo,"width",0)
+	echo l:w l:h
+	if l:w >= l:whratio * l:h
+		vnew
+	else
+		new
+	endif
+endfu
 
-" netrw (explore command)
-nnoremap <leader>e :25Lexplore<CR>
-call s:mapIfEmpty('nnore', '<silent> <leader>e', ':25Lexplore<CR>')
+silent! nnoremap <leader>h :split<CR>
+silent! nnoremap <leader>v :vsplit<CR>
+silent! nnoremap <leader>n :call SmartNewWin()<CR>
 
-" file finder
-call s:mapIfEmpty('nnore', '<leader>f', ':find ')
+silent! nnoremap <unique> <leader>e :25Lexplore<CR>
+silent! nnoremap <unique> <leader>f :find 
 
-
-"Alias replace all to S
 nnoremap S :%s##gI<Left><Left><Left>
 
 nnoremap <leader>q :q<CR>
 nnoremap <leader>Q :q!
 nnoremap <leader>c :bdelete<CR>
-"nnoremap <leader>w :w<CR>
+nnoremap <M-c> :bdelete<CR>
+inoremap <M-c> <Esc>:bdelete<CR>
+nnoremap <M-c> <C-\><C-N>:bdelete<CR>
 nnoremap <C-s> :w<CR>
 
-" Tab control
-nnoremap <c-w>t         :tabnext<CR>
-nnoremap <c-w>T         :tabprevious<CR>
-nnoremap <c-w><tab>     :tabnext<cr>
-nnoremap <c-w><s-tab>   :tabprevious<CR>
-nnoremap <leader>t      :tabnew<CR>
-
-" reopen closed file
 nnoremap <leader>r :n#<CR>
 
-nnoremap <silent><expr> <leader>n :tabnext<CR>
 nnoremap <C-/> :nohlsearch<cr>
 nnoremap <C-_> :nohlsearch<cr>
 
-" Buffer navigation
 tnoremap <A-h> <C-\><C-N><C-w>h
 tnoremap <A-j> <C-\><C-N><C-w>j
 tnoremap <A-k> <C-\><C-N><C-w>k
@@ -116,6 +102,28 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
+
+nnoremap <M-n>      :bnext<CR>
+nnoremap <M-p>      :bNext<CR>
+inoremap <M-n>      <Esc>:bnext<CR>
+inoremap <M-p>      <Esc>:bNext<CR>
+tnoremap <M-n>      <C-\><C-n>:bnext<CR>
+tnoremap <M-p>      <C-\><C-n>:bNext<CR>
+
+nnoremap <leader>t  :tabnew<CR>
+nnoremap <M-,>		  :tabnext<CR>
+nnoremap <M-.>      :tabprevious<CR>
+nnoremap <C-Tab>    :tabnext<CR>
+nnoremap <C-S-Tab>  :tabprevious<CR>
+inoremap <C-Tab>    <Esc>:tabnext<CR>
+inoremap <C-S-Tab>  <Esc>:tabprevious<CR>
+inoremap <M-,>      <Esc>:tabnext<CR>
+inoremap <M-.>      <Esc>:tabprevious<CR>
+tnoremap <C-Tab>    <C-\><C-n>:tabnext<CR>
+tnoremap <C-S-Tab>  <C-\><C-n>:tabprevious<CR>
+tnoremap <M-,>      <C-\><C-n>:tabnext<CR>
+tnoremap <M-.>      <C-\><C-n>:tabprevious<CR>
+
 
 nnoremap <silent> <leader>u :UndotreeToggle <bar> UndotreeFocus<CR>
 
@@ -213,15 +221,16 @@ endfun
 
 command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
 
-command! -nargs=1 -complete=command -bar -range L botright new | term <args>
 " Save file as sudo when no sudo permissions
 command Sudowrite execute 'write ! sudo tee %' <bar> edit!
 " CDC = Change to Directory of Current file
 command CDC cd %:p:h
 
-augroup term 
+augroup TerminalTweaks
    au!
-   au BufEnter * if &buftype == 'terminal' | startinsert | endif
+	au TermOpen * setlocal listchars= nonumber norelativenumber statusline=%{b:term_title}
+   au TermOpen * let b:term_title=substitute(b:term_title,'.*/','',1) | startinsert
+   au BufEnter,BufWinEnter,WinEnter term://* startinsert
 augroup END
 
 " Basic settings
@@ -235,7 +244,7 @@ set autoindent
 set linebreak
 
 " Tab Settings
-set expandtab
+set noexpandtab
 set shiftwidth=3
 set softtabstop=3
 set tabstop=3
@@ -253,8 +262,11 @@ try
 catch /^Vim\%((\a\+)\)\=:E185/
 endtry
 
-set laststatus=2 " 2 lines of status bar(bottom) 
+set lazyredraw
+set cmdheight=2
 set noshowmode
+set matchpairs+=<:>,*:*,`:`
+set list listchars=tab:\ \ ,trail:·
 
 " Autocompletion
 "set wildmode=longest,list,full

@@ -5,24 +5,25 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$PATH:$HOME/.local/bin"
+[[ ! -f "$ZDOTDIR/env.zsh" ]] || source "$ZDOTDIR/env.zsh"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-if command -v nvim &> /dev/null; then
-   export EDITOR='nvim'
-elif command -v vim &> /dev/null; then
-   export EDITOR='vim'
+if [ -z $EDITOR ]; then
+	if command -v nvim &> /dev/null; then
+		export EDITOR='nvim'
+	elif command -v vim &> /dev/null; then
+		export EDITOR='vim'
+	fi
 fi
 
 alias q=exit
-alias ls="ls --color=auto -A"
+alias l="lsd"
+alias ll="lsd -l"
 alias lf="~/.config/lf/lfrun"
 alias grep="grep --color=auto"
 alias diff="diff --color=auto"
-alias drag-to="~/scripts/drag-to"
-#alias matlab="/mnt/ext/lapps/MATLAB/R2021a/bin/matlab"
 alias xtprc="~/scripts/disable-touchpad-right-click.sh"
 #alias conda-on="/mnt/ext/lapps/anaconda3/bin/conda activate"
 alias pf=paleofetch
@@ -34,8 +35,8 @@ alias nl="lvim"
 alias nv="glvim"
 alias lg="lazygit"
 alias cc="calcurse"
-alias bat="bat --decorations=never"
 alias o=xdg-open
+alias path='echo "$PATH" | sed -e "s/:/\n/g" -'
 alias ze='z -e'
 
 # package management
@@ -87,10 +88,10 @@ bindkey '^v' edit-command-line
 autoload -U edit-command-line && zle -N edit-command-line && bindkey -M vicmd "^v" edit-command-line
 
 # Use vim keys in tab complete menu:
-#bindkey -M menuselect '^h' vi-backward-char
+bindkey -M menuselect '^h' vi-backward-char
 bindkey -M menuselect '^j' vi-down-line-or-history
 bindkey -M menuselect '^k' vi-up-line-or-history
-#bindkey -M menuselect '^l' vi-forward-char
+bindkey -M menuselect '^l' vi-forward-char
 bindkey -M menuselect 'left' vi-backward-char
 bindkey -M menuselect 'down' vi-down-line-or-history
 bindkey -M menuselect 'up' vi-up-line-or-history

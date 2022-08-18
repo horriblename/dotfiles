@@ -87,9 +87,9 @@ videowallEnabled=false
 wobblywindowsEnabled=true
 
 [Script-bismuth]
+floatingClass=nsxiv-float
 ignoreActivity=Gaming
 ignoreClass=yakuake,spectacle,Conky,dragon-drag-and-drop,steam,flameshot
-keepFloatAbove=false
 screenGapBottom=6
 screenGapLeft=6
 screenGapRight=6

@@ -28,7 +28,7 @@ let g:Netrw_UserMaps = [
          \] " relevant functions are decalred below
 
 hi! link netrwMarkFile WildMenu
-hi! netrwCopyMark  guibg=Orange guifg=black
+hi! netrwCopyMark  guibg=Yellow guifg=black
 hi! netrwMoveMark  guibg=Red guifg=black
 
 " defining g:netrw_pasteaction for future use (in ftplugin)
