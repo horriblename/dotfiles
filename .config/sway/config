@@ -12,7 +12,6 @@ set $term footclient || foot
 set $menu wofi -I -S drun
 
 # sway better initialization
-#
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
      dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
@@ -229,9 +228,10 @@ for_window [title="Firefox — Sharing Indicator"] floating enable, move to scra
 no_focus [title="Firefox — Sharing Indicator"] 
 
 assign [class="^Steam$"] $ws7
-for_window [class="^Steam$"] floating disable, move container to workspace $ws7, workspace $ws7
-for_window [class="steam_app"] move container to workspace $ws8, workspace $ws8
+#for_window [class="^Steam$"] floating disable, move container to workspace $ws7, workspace $ws7
+assign [class="^steam_app"] $ws8
 for_window [workspace=$ws7] floating enable
+for_window [workspace=$ws8] floating enable
 
 	 ######################### Start external scripts ########################
 # Status Bar
@@ -247,7 +247,7 @@ exec nextcloud --background
 exec krunner -d
 
 # Power Management
-exec swayidle -C ~/.config/sway/swayidle.conf
+exec swayidle
 
 exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
 exec clipman restore
