@@ -1,0 +1,21 @@
+image=~/Pictures/wallpapers/dwm_3.png
+font=Google Sans
+#inside-color=ebdbb2
+#inside-clear-color=fabd2f
+#inside-caps-lock-color=d3869b
+#inside-ver-color=fabd2f
+#inside-wrong-color=d3869b
+#key-hl-color=b8bb26
+#layout-bg-color=83a598
+#
+#line-color=ebdbb2
+#line-clear-color=fabd2f
+#line-caps-lock-color=d3869b
+#line-ver-color=fabd2f
+#line-wrong-color=d3869b
+#
+#line-uses-ring
+#ring-color=83a598
+#ring-caps-lock-color=83a598
+#ring-ver-color=fe8019
+#ring-wrong-color=fb4934

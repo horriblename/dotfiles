@@ -3,6 +3,7 @@ autotiling # chaotic-aur
 clipman # chaotic-aur
 foot
 grim
+slurp
 sway
 sway-nvidia
 swaybg

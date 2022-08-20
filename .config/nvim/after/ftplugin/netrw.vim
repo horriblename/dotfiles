@@ -54,7 +54,7 @@ nnoremap <buffer> <silent> <nowait> gn  <cmd>Explore ~/Nextcloud <cr>
 nnoremap <buffer> <silent> <nowait> gv  <cmd>exec 'e '.stdpath('config')<cr>
 
 if has('unix')
-   nnoremap <buffer> <silent> <nowait> gj  <cmd>Explore ~/jail <cr>
+   nnoremap <buffer> <silent> <nowait> gj  <cmd>Explore ~/Jail <cr>
    nnoremap <buffer> <silent> <nowait> gr  <cmd>Explore ~/repo <cr>
    nnoremap <buffer> <silent> <nowait> gc  <cmd>Explore ~/.config <cr>
    nnoremap <buffer> <silent> <nowait> gl  <cmd>Explore ~/.local <cr>

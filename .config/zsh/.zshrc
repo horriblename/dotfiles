@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-[[ ! -f "$ZDOTDIR/env.zsh" ]] || source "$ZDOTDIR/env.zsh"
+[[ ! -f "$ZDOTDIR/.profile" ]] || source "$HOME/.profile"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -148,7 +148,6 @@ precmd() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 # Control bindings for programs
 #bindkey -s "^g" "lc\n"
 bindkey -s "^g" "lazygit\n"
-bindkey "^h" backward-delete-word
 bindkey "^l" clear-screen
 lfcd (){
 	tmp="$(mktemp)"
@@ -203,5 +202,8 @@ unset __conda_setup
 if [[ $TTY =~ "/dev/tty" ]]; then
    [[ ! -f "$ZDOTDIR/.p10k-tty.zsh" ]] || source "$ZDOTDIR/.p10k-tty.zsh"
 else
+	# some terminals still use ^h as backspace (modern ones use ^h for ^Backspace)
+	# the mose obvious example is tty
+	bindkey "^h" backward-delete-word
    [[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"
 fi

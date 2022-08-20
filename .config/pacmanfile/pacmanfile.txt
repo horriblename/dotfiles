@@ -1,9 +1,7 @@
 polkit
-swi-prolog
-ghcup-hs-bin
 #swhkd-git
-mprocs # aur
 bitwarden-cli
+cage
 kteatime
 nsxiv
 uni
@@ -25,5 +23,3 @@ jdk-openjdk
 xterm
 alacritty
 ranger
-ffmpegthumbnailer
-epub-thumbnailer-git

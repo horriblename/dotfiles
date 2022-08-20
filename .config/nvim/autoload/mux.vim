@@ -5,8 +5,7 @@ fu! mux#setup()
 		return
 	endif
 
-	set laststatus=0
-	set cmdheight=1
+	set laststatus=0 cmdheight=1
 	hi normal guibg=000000 
 
 	map	<leader>q :close<CR>
@@ -36,6 +35,7 @@ fu! mux#setup()
 	xmap	<C-S-C> y 
 
 	call setenv('EDITOR', 'nvim --server '.v:servername.' --remote')
+	call setenv('NVIM_PARENT', v:servername)
 
 	hi! TabLine ctermbg=000000 ctermfg=Grey guibg=000000 guifg=DarkGrey
 	hi! link TabLineFill TabLine
@@ -49,4 +49,37 @@ fu! mux#setup()
 	term
 
 	let g:mux_ready=1
+	let g:mux_pending_close={}
+endfu
+
+fu! mux#serverOpen(files)
+	if type(files) == type("")
+		edit files
+	elseif type(files) == type([]) && !empty(files)
+
+	else
+		echomsg "mux#serverOpen() received invalid argument"
+	endif
+endfu
+
+fu! mux#remote()
+	call s:remote(argv(-1))
+endfu
+
+
+fu! s:remote(files)
+	let sock=getenv('NVIM_PARENT')
+	if empty(sock)
+		echoerr "No nested session detected!"
+		return
+	endif
+
+	let chan=sockconnect('pipe', $NVIM_PARENT)
+
+	"call rpcrequest(chan, 'mux#serverOpen', files)
+	echo 'trying rpc..'
+	echo rpcrequest(chan, 'luaeval', 'vim.notify("hihihi")')
+
+	call chanclose(chan)
+	quit!
 endfu

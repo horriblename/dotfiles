@@ -313,7 +313,7 @@ map gm cd ~/Music
 map gs cd ~/scripts
 map gc cd ~/.config
 map gn cd ~/Nextcloud
-map gj cd ~/jail
+map gj cd ~/Jail
 map gr cd ~/repo
 map gl cd ~/.local
 

@@ -79,7 +79,7 @@ nnoremap S :%s##gI<Left><Left><Left>
 
 nnoremap <leader>q :q<CR>
 nnoremap <leader>Q :q!
-nnoremap <leader>c :bdelete<CR>
+nnoremap <leader>c :bwipeout<CR>
 nnoremap <M-c> :bdelete<CR>
 inoremap <M-c> <Esc>:bdelete<CR>
 nnoremap <M-c> <C-\><C-N>:bdelete<CR>
@@ -226,12 +226,14 @@ command Sudowrite execute 'write ! sudo tee %' <bar> edit!
 " CDC = Change to Directory of Current file
 command CDC cd %:p:h
 
-augroup TerminalTweaks
-   au!
-	au TermOpen * setlocal listchars= nonumber norelativenumber statusline=%{b:term_title}
-   au TermOpen * let b:term_title=substitute(b:term_title,'.*/','',1) | startinsert
-   au BufEnter,BufWinEnter,WinEnter term://* startinsert
-augroup END
+if has('nvim')
+	augroup TerminalTweaks
+		au!
+		au TermOpen * setlocal listchars= nonumber norelativenumber statusline=%{b:term_title}
+		au TermOpen * let b:term_title=substitute(b:term_title,'.*/','',1) | startinsert
+		au BufEnter,BufWinEnter,WinEnter term://* startinsert
+	augroup END
+endif
 
 " Basic settings
 set mouse=a

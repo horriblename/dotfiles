@@ -7,10 +7,13 @@ buildah
 chafa
 dragon-drop
 droidcam
+epub-thumbnailer-git
+ffmpegthumbnailer
 firefox
 flameshot
 gparted
 grub-theme-cyberre # aur
+j4-dmenu-desktop # chaotic-aur
 kolourpaint
 kwin-bismuth # chaotic-aur
 libappindicator-gtk3 # optional for droidcam

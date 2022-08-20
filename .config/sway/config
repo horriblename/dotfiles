@@ -47,8 +47,10 @@ seat seat0 xcursor_theme Breeze 9
 set $gnome-schema org.gnome.desktop.interface
 
 exec_always {
-    gsettings set $gnome-schema gtk-theme 'Breeze'
+    #gsettings set $gnome-schema gtk-theme 'Breeze'
+    gsettings set $gnome-schema gtk-theme 'Adwaita-dark'
     gsettings set $gnome-schema icon-theme 'candy-icons'
+		gtk-application-prefer-dark-theme=1
 }
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -63,6 +65,7 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 bindsym $alt+Tab focus mode_toggle
+bindsym $mod+i focus mode_toggle
 #bindsym $alt+Shift+Tab focus mode_toggle
 
 # move focused window
@@ -74,7 +77,7 @@ bindsym $mod+Shift+l move right
 # layout keybinds
 bindsym F11 fullscreen toggle
 bindsym $mod+f floating toggle
-bindsym $mod+g smart_borders on, smart_gaps on
+bindsym $mod+g smart_borders on, smart_gaps toggle
 
 # Here for testing
 bindsym $mod+t layout default
@@ -99,7 +102,7 @@ set $ws9 "9"
 set $ws10 "10"
 set $ws11 "11"
 set $ws12 "12"
-set $dashboard $ws6
+set $dashboard $ws10
 
 # switch to workspace
 bindsym $mod+Tab workspace next
@@ -116,6 +119,7 @@ bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 bindsym $mod+d workspace $dashboard
 bindsym $alt+s scratchpad show
+bindsym $mod+s scratchpad show
 bindsym F1 scratchpad show
 
 # move focused container to workspace
@@ -163,7 +167,7 @@ bindsym $mod+Shift+Control+k move container to output up
 # reload the configuration file
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+e exec ~/.config/wofi/powermenu.sh logout
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -208,13 +212,14 @@ for_window [workspace="scratchpad" app_id="[^(quake)]$"] floating toggle
 assign [app_id="quake$"] scratchpad
 for_window [app_id="quake$"] floating enable, resize set 100 ppt 55 ppt, move position 0 ppt 0 ppt, gaps outer 0
 
-assign [app_id="^sticky"] $ws6
+assign [app_id="^sticky"] $dashboard
 for_window [app_id="^sticky"] floating enable
 for_window [app_id="^sticky-scratch$"] resize set 20 ppt 25 ppt, move position 0 ppt 75 ppt
 
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="quake"] floating enable
 for_window [title="Select file"] floating enable
+for_window [app_id="dragon_drop"] floating enable, sticky enable
 
 for_window [app_id="mpv"] inhibit_idle focus
 for_window [app_id="com.nextcloud.desktopclient.nextcloud"] floating enable, move position
@@ -227,15 +232,19 @@ for_window [app_id="firefox"] inhibit_idle
 for_window [title="Firefox — Sharing Indicator"] floating enable, move to scratchpad
 no_focus [title="Firefox — Sharing Indicator"] 
 
-assign [class="^Steam$"] $ws7
-#for_window [class="^Steam$"] floating disable, move container to workspace $ws7, workspace $ws7
-assign [class="^steam_app"] $ws8
 for_window [workspace=$ws7] floating enable
 for_window [workspace=$ws8] floating enable
+assign [class="^Steam$"] $ws7
+assign [class="^steam_app"] $ws8
+for_window [class="^Steam$" title="^Steam$"] floating disable
 
 	 ######################### Start external scripts ########################
 # Status Bar
-bar swaybar_command waybar
+bar {
+	1 swaybar_command waybar
+	1 height 38
+	1 mode overlay
+}
 
 #exec swhks&
 exec foot --server
@@ -255,6 +264,7 @@ exec wl-paste -t text --watch clipman store
 
 #exec_always autotiling
 exec_always swaymgr
+exec_always swaymgr -s 'spiral'
 
 # General Hotkeys
 ###---Audio controls---###
@@ -273,9 +283,9 @@ bindsym XF86AudioPrev exec playerctl previous
 # bindsym $mod+Left exec light -U 5 && pkill -SIGRTMIN+4 i3block
 
 ###---System Control---###
-bindsym XF86Sleep exec ~/.local/bin/swaysleep
-bindsym $mod+shift+z exec ~/.config/sway/nag-power.sh 'reboot'
-bindsym $mod+shift+x exec ~/.config/sway/nag-power.sh 'off'
+bindsym XF86Sleep exec systemctl suspend
+bindsym $mod+shift+z exec ~/.config/wofi/powermenu.sh reboot
+bindsym $mod+shift+x exec ~/.config/wofi/powermenu.sh shutdown
 bindsym $mod+v exec clipman pick -t wofi
 
 ###---Timer(Clock)---###
