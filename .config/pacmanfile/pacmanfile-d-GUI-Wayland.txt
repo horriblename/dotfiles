@@ -20,5 +20,5 @@ xorg-xwayland
 #swayfire-git # chaotic-aur
 
 # hyprland
-hyprland-bin
+hyprland-git
 waybar-hyprland-git

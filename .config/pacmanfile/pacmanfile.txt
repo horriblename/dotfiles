@@ -6,6 +6,16 @@ kteatime
 nsxiv
 uni
 tofi
+element-desktop
+android-studio # chaotic-aur
+easyeffects
+
+# opengl
+glfw-wayland
+#glfw-x11
+glew
+
+tllist # foot build dep
 
 jdk-openjdk
 
@@ -15,6 +25,8 @@ jdk-openjdk
 #dmenu
 #rofi
 #picom
+
+dwl
 
 
 #snapper-gui-git # chaotic-aur
