@@ -142,10 +142,11 @@ cmd dragon %{{
 cmd dragon-curl-target &{{
    # doesn't work: use '\@ [comment]' to leave a comment on keymapped function
    #@=${@/\@ */}
-   dragon-drop $@ --and-exit --target | while read url
+   dragon-drop $@ --target | while read url
    do
       curl -O "$url" && lf -remote "send $id echo 'Download completed'"\
-      || lf -remote "send $id echo 'Download Failed'"
+			&& lf -remote "send $id reload"\
+			|| lf -remote "send $id echo 'Download Failed'"
    done
 }}
 
@@ -259,7 +260,7 @@ map F broot_jump
 map dr dragon --all --and-exit
 map ds dragon --all
 map di dragon
-map dt dragon-curl-target
+map dt dragon-curl-target --and-exit
 map dm mvdragon
 map dc cpdragon
 map dl dlfile

@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-[[ ! -f "$ZDOTDIR/.profile" ]] || source "$HOME/.profile"
+[[ ! -f "$HOME/.profile" ]] || source "$HOME/.profile"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
