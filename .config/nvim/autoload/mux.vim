@@ -34,7 +34,7 @@ fu! mux#setup()
 	tmap	<C-S-V> <C-\><C-N>pi 
 	xmap	<C-S-C> y 
 
-	call setenv('EDITOR', 'nvim --server '.v:servername.' --remote')
+	"call setenv('EDITOR', 'nvim --server '.v:servername.' --remote')
 	call setenv('NVIM_PARENT', v:servername)
 
 	hi! TabLine ctermbg=000000 ctermfg=Grey guibg=000000 guifg=DarkGrey
