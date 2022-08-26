@@ -73,7 +73,7 @@ case $chosen in
         fi
         ;;
     $logout)
-		ans=$(get_confirmation &)
+		ans=$(get_confirmation $logout &)
 		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
 			swaymsg exit
 		elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then

@@ -102,5 +102,12 @@ tnoremap <C-S-Tab>  <C-\><C-n>:tabprevious<CR>
 tnoremap <M-,>      <C-\><C-n>:tabnext<CR>
 tnoremap <M-.>      <C-\><C-n>:tabprevious<CR>
 
+for i in range(1,8)
+	exec 'noremap <M-' . i . '> :' . i . 'tabnext<CR>'
+	exec 'inoremap <M-' . i . '> <Esc>:' . i . 'tabnext<CR>'
+	exec 'tnoremap <M-' . i . '> <C-\><C-n>:' . i . 'tabnext<CR>'
+endfor
+noremap <M-9> :$tabnext<CR>
+
 
 nnoremap <silent> <leader>u :UndotreeToggle <bar> UndotreeFocus<CR>

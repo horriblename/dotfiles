@@ -25,7 +25,7 @@ let g:Netrw_UserMaps = [
          \['mlr', 'netrw#custom#CreateRelLink'],
          \['mlh', 'netrw#custom#CreateHardLink'],
          \['P', 'netrw#custom#TogglePreviewMode'],
-         \] " relevant functions are decalred below
+		\] " relevant functions are decalred below
 
 hi! link netrwMarkFile WildMenu
 hi! netrwCopyMark  guibg=Yellow guifg=black

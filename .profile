@@ -7,7 +7,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 
 export EDITOR=${EDITOR:-nvim}
 export PAGER=bat
-export MANPAGER=bat
+export MANPAGER='bat --decorations=never'
 
 ### App Settings
 #

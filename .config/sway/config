@@ -50,7 +50,7 @@ exec_always {
     #gsettings set $gnome-schema gtk-theme 'Breeze'
     gsettings set $gnome-schema gtk-theme 'Adwaita-dark'
     gsettings set $gnome-schema icon-theme 'candy-icons'
-		gtk-application-prefer-dark-theme=1
+		#gtk-application-prefer-dark-theme=1
 }
 
 # Use Mouse+$mod to drag floating windows to their wanted position

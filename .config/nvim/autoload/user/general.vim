@@ -169,11 +169,6 @@ set termguicolors
 highlight VertSplit guifg=#c2bfa5 gui=none cterm=reverse
 set scrolloff=5
 set cursorline
-try
-    colorscheme monokai
-catch /^Vim\%((\a\+)\)\=:E185/
-endtry
-
 set lazyredraw
 set cmdheight=2
 set noshowmode
