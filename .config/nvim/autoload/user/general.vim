@@ -140,7 +140,7 @@ if has('nvim')
 	augroup TerminalTweaks
 		au!
 		au TermOpen * setlocal listchars= nonumber norelativenumber statusline=%{b:term_title}
-		au TermOpen * let b:term_title=substitute(b:term_title,'.*/','',1) | startinsert
+		au TermOpen * let b:term_title=substitute(b:term_title,'.*:','',1) | startinsert
 		au BufEnter,BufWinEnter,WinEnter term://* startinsert
 	augroup END
 endif

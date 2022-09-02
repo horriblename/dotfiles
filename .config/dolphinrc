@@ -9,6 +9,9 @@ eDP1 Width 1920x1080=1032
 eDP1 XPosition 1920x1080=14
 eDP1 YPosition 1920x1080=46
 
+[$Version]
+update_info=dolphin_detailsmodesettings.upd:rename-leading-padding
+
 [CompactMode]
 FontWeight=50
 

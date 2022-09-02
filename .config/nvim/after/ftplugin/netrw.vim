@@ -57,6 +57,7 @@ if has('unix')
    nnoremap <buffer> <silent> <nowait> gj  <cmd>Explore ~/Jail <cr>
    nnoremap <buffer> <silent> <nowait> gr  <cmd>Explore ~/repo <cr>
    nnoremap <buffer> <silent> <nowait> gc  <cmd>Explore ~/.config <cr>
+   nnoremap <buffer> <silent> <nowait> gC  <cmd>Explore ~/.cache <cr>
    nnoremap <buffer> <silent> <nowait> gl  <cmd>Explore ~/.local <cr>
 
    nnoremap <buffer> <silent> <nowait> g/  <cmd>Explore $PREFIX/ <cr>

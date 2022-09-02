@@ -16,7 +16,6 @@ nmap <C-W>-  <C-W>-<C-W>
 vnoremap <Tab>    >gv
 vnoremap <S-Tab>  <gv
 
-noremap! <C-h> <C-w>
 noremap! <C-backspace> <C-w>
 
 tnoremap <M-C-N> <C-\><C-n>

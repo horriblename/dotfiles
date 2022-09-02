@@ -46,8 +46,8 @@ Outline=true
 TextureScale=false
 
 [Effect-blur]
-BlurStrength=12
-NoiseStrength=7
+BlurStrength=6
+NoiseStrength=6
 
 [Effect-desktopgrid]
 BorderActivate=3

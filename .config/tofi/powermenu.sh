@@ -22,7 +22,7 @@ logout=''
 # Get user confirmation 
 get_confirmation() {
 	res=$(printf '\n  ' | $tofi_styled --prompt-text "$1 │ " --horizontal true \
-		--font "$font" --font-size 20 --height 70 --width 230 --result-spacing=30)
+		--font "$font" --font-size 20 --height 70 --width 230 --result-spacing=25)
 	[ res = '' ] && echo yes || echo no
 }
 

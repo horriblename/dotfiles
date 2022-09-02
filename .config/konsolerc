@@ -10,6 +10,9 @@ eDP1 YPosition 1920x1080=8
 [Desktop Entry]
 DefaultProfile=Konsole.profile
 
+[General]
+ConfigVersion=1
+
 [KFileDialog Settings]
 Recent Files[$e]=file:///tmp/tmp.txt,file:///tmp/tmp.txt
 Recent URLs[$e]=file:///tmp/
@@ -30,7 +33,8 @@ HDMI-2 Width 1920x1080=1920
 HDMI-2 Window-Maximized 1920x1080=true
 HDMI-2 XPosition 1920x1080=0
 HDMI-2 YPosition 1920x1080=22
-HDMI-A-2 Window-Maximized 1920x1080=true
+HDMI-A-2 Height 1920x1080=1018
+HDMI-A-2 Width 1920x1080=1904
 MenuBar=Disabled
 State=AAAA/wAAAAD9AAAAAQAAAAAAAAEwAAAEAPwCAAAAAfsAAAAcAFMAUwBIAE0AYQBuAGEAZwBlAHIARABvAGMAawAAAAAAAAAEAAAAAN0BAAADAAADtwAABAAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAgAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAAAAAAD/////AAAAAAAAAAAAAAAcAHMAZQBzAHMAaQBvAG4AVABvAG8AbABiAGEAcgAAAAAA/////wAAAAAAAAAA
 StatusBar=Disabled
@@ -60,5 +64,4 @@ NewTabBehavior=PutNewTabAfterCurrentTab
 TabBarPosition=Top
 
 [UiSettings]
-ColorScheme=
-WindowColorScheme=Default
+ColorScheme=Default

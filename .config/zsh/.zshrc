@@ -174,6 +174,42 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 _ZL_CD=pushd
 eval "$(lua ~/scripts/z.lua --init zsh enhanced)"
 
+# Manually set title
+_title_precmd(){ echo -ne '\e]0;zsh\007' }
+_title_preexec() { echo -ne "\e]0;${1%% *}\007" }
+
+typeset -ga precmd_functions
+[ -n "${precmd_functions[(r)_title_precmd]}" ] || {
+	precmd_functions[$(($#precmd_functions+1))]=_title_precmd
+}
+
+typeset -ga preexec_functions
+[ -n "${preexec_functions[(r)_title_preexec]}" ] || {
+	preexec_functions[$(($#preexec_functions+1))]=_title_preexec
+}
+
+if [ ! -z ${NVIM:+x} -a -z "x" ]; then
+	_nvimmux_precmd() {
+		#nvim --server "$NVIM" --remote-expr "mux#setTitle('$$',&shell)" > /dev/null
+	}
+
+	typeset -ga precmd_functions
+	[ -n "${precmd_functions[(r)_nvimmux_precmd]}" ] || {
+		precmd_functions[$(($#precmd_functions+1))]=_nvimmux_precmd
+	}
+
+	_nvimmux_preexec() {
+		#cmd=$(echo $1 | sed "s/'/\\'/g")
+		cmd="$1"
+		nvim --server "$NVIM" --remote-expr "mux#setTitle('$$','$cmd')" | cat
+	}
+
+	typeset -ga preexec_functions
+	[ -n "${preexec_functions[(r)_nvimmux_preexec]}" ] || {
+		preexec_functions[$(($#preexec_functions+1))]=_nvimmux_preexec
+	}
+fi
+
 # Power level 10k prompt
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
