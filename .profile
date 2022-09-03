@@ -49,5 +49,4 @@ export _ZL_DATA="$XDG_DATA_HOME/zlua"
 
 export PATH="$HOME/.local/bin:$GOPATH/bin:$CARGO_HOME/bin:$PATH"
 
-alias dotfiles='git --git-dir=$XDG_CONFIG_HOME/dotfiles --work-tree=$HOME'
-alias lgdotfiles='lazygit --git-dir=$XDG_CONFIG_HOME/dotfiles --work-tree=$HOME'
+[ -f "$XDG_CONFIG_HOME/aliases" ] && source "$XDG_CONFIG_HOME/aliases"

@@ -18,32 +18,6 @@ if [ -z $EDITOR ]; then
 	fi
 fi
 
-alias q=exit
-alias l="lsd"
-alias ll="lsd -l"
-alias lf="~/.config/lf/lfrun"
-alias grep="grep --color=auto"
-alias diff="diff --color=auto"
-alias xtprc="~/scripts/disable-touchpad-right-click.sh"
-#alias conda-on="/mnt/ext/lapps/anaconda3/bin/conda activate"
-alias pf=paleofetch
-alias n="$EDITOR"
-alias nn="$EDITOR ./"
-alias cd='pushd -q'
-alias dirs='dirs -p'
-alias nl="lvim"
-alias nv="glvim"
-alias lg="lazygit"
-alias cc="calcurse"
-alias o=xdg-open
-alias path='echo "$PATH" | sed -e "s/:/\n/g" -'
-alias swayrun='swaymsg scratchpad show &&'
-
-# package management
-alias inst='paru -S'
-alias syu='paru -Syu && ~/.local/bin/pacmanfile sync'
-alias ss='paru -Ss'
-alias pacf='nvim -c "cd ~/.config/pacmanfile" + ~/.config/pacmanfile/pacmanfile.txt && ~/.local/bin/pacmanfile sync'
 
 # too lazy to deal with theming
 export GTK_THEME=Breeze # Adwaita:dark
