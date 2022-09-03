@@ -44,8 +44,6 @@ alias inst='paru -S'
 alias syu='paru -Syu && ~/.local/bin/pacmanfile sync'
 alias ss='paru -Ss'
 alias pacf='nvim -c "cd ~/.config/pacmanfile" + ~/.config/pacmanfile/pacmanfile.txt && ~/.local/bin/pacmanfile sync'
-alias dotfiles='git --git-dir=$XDG_CONFIG_HOME/dotfiles --work-tree=$HOME'
-alias lgdotfiles='lazygit --git-dir=$XDG_CONFIG_HOME/dotfiles --work-tree=$HOME'
 
 # too lazy to deal with theming
 export GTK_THEME=Breeze # Adwaita:dark
