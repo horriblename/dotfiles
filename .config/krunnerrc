@@ -1,3 +1,6 @@
+[General]
+ActivityAware=false
+
 [PlasmaRunnerManager]
 migrated=true
 
@@ -8,27 +11,33 @@ Kill RunnerEnabled=true
 PowerDevilEnabled=true
 Spell CheckerEnabled=true
 appstreamEnabled=true
-baloosearchEnabled=true
-bookmarksEnabled=true
+baloosearchEnabled=false
+bookmarksEnabled=false
 browserhistoryEnabled=false
 browsertabsEnabled=false
 calculatorEnabled=true
-desktopsessionsEnabled=true
+desktopsessionsEnabled=false
+helprunnerEnabled=false
 katesessionsEnabled=false
-konsoleprofilesEnabled=true
+konsoleprofilesEnabled=false
+krunner_spellcheckEnabled=false
+kwin-runner-windowsEnabled=false
 kwinEnabled=true
-locationsEnabled=true
+locationsEnabled=false
 org.kde.activities2Enabled=true
 org.kde.activitiesEnabled=true
-org.kde.datetimeEnabled=true
+org.kde.datetimeEnabled=false
 org.kde.windowedwidgetsEnabled=true
-placesEnabled=true
+placesEnabled=false
 plasma-desktopEnabled=true
+plasma-runner-baloosearchEnabled=false
+plasma-runner-browserhistoryEnabled=false
+plasma-runnners-activitiesEnabled=false
 recentdocumentsEnabled=true
 servicesEnabled=true
 shellEnabled=false
 unitconverterEnabled=true
-webshortcutsEnabled=true
+webshortcutsEnabled=false
 windowsEnabled=true
 
 [Runners][Dictionary]

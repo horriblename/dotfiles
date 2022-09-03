@@ -131,7 +131,7 @@ toolBarFont=Google Sans,10,-1,5,50,0,0,0,0,0
 Theme=candy-icons
 
 [KDE]
-AnimationDurationFactor=0.5
+AnimationDurationFactor=0.25
 LookAndFeelPackage=org.kde.breezedark.desktop
 ShowDeleteCommand=false
 SingleClick=false
