@@ -218,13 +218,14 @@ cmd trash &{{
       fi
    done
 
-   lf -remote "send $id unselect; reload"
-
    if (( $failed == 0 )); then
       lf -remote "send $id echo 'Moved to trash'"
    else
       lf -remote "send $id echo $failed files not moved to trash; last error msg"
    fi
+
+   lf -remote "send $id unselect"
+	lf -remote "send $id reload"
 }}
 
 cmd clear_trash %trash-empty

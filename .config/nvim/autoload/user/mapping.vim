@@ -26,6 +26,9 @@ noremap L g_
 noremap gL g$
 noremap gH g^
 
+inoremap <C-l> <Right>
+inoremap <C-h> <Left>
+
 " surround with parenthesis. Using register "z to not interfere with clipboard
 xmap S <Nop>
 xnoremap S( "zs()<Esc>"zPgvlOlO<Esc>
@@ -88,18 +91,18 @@ tnoremap <M-n>      <C-\><C-n>:bnext<CR>
 tnoremap <M-p>      <C-\><C-n>:bNext<CR>
 
 nnoremap <leader>t  :tabnew<CR>
-nnoremap <M-,>		  :tabnext<CR>
-nnoremap <M-.>      :tabprevious<CR>
+nnoremap <M-.>		  :tabnext<CR>
+nnoremap <M-,>      :tabprevious<CR>
 nnoremap <C-Tab>    :tabnext<CR>
 nnoremap <C-S-Tab>  :tabprevious<CR>
 inoremap <C-Tab>    <Esc>:tabnext<CR>
 inoremap <C-S-Tab>  <Esc>:tabprevious<CR>
-inoremap <M-,>      <Esc>:tabnext<CR>
-inoremap <M-.>      <Esc>:tabprevious<CR>
+inoremap <M-.>      <Esc>:tabnext<CR>
+inoremap <M-,>      <Esc>:tabprevious<CR>
 tnoremap <C-Tab>    <C-\><C-n>:tabnext<CR>
 tnoremap <C-S-Tab>  <C-\><C-n>:tabprevious<CR>
-tnoremap <M-,>      <C-\><C-n>:tabnext<CR>
-tnoremap <M-.>      <C-\><C-n>:tabprevious<CR>
+tnoremap <M-.>      <C-\><C-n>:tabnext<CR>
+tnoremap <M-,>      <C-\><C-n>:tabprevious<CR>
 
 for i in range(1,8)
 	exec 'noremap <M-' . i . '> :' . i . 'tabnext<CR>'

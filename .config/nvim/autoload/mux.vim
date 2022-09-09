@@ -21,9 +21,9 @@ fu! mux#setup()
 	map	<C-S-l> :+tabmove<CR>
 	map!	<C-S-l> <Esc>:+tabmove<CR>
 	tmap	<C-S-l> <C-\><C-N>:+tabmove<CR>
-	map	<C-S-l> :-tabmove<CR>
-	map!	<C-S-l> <Esc>:-tabmove<CR>
-	tmap	<C-S-l> <C-\><C-N>:-tabmove<CR>
+	map	<C-S-h> :-tabmove<CR>
+	map!	<C-S-h> <Esc>:-tabmove<CR>
+	tmap	<C-S-h> <C-\><C-N>:-tabmove<CR>
 
 	map	<C-S-9> :vnew +Term<CR>
 	map!	<C-S-9> <Esc>:vnew +Term<CR>

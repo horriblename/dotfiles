@@ -107,7 +107,7 @@ function! Zlua(pattern)
    if &ft == "netrw"
       execute "Explore" dir
    elseif &ft == "NvimTree"
-      execute "cd" dir
+      execute "cd ".dir
    else
       return dir
    endif

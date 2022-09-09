@@ -183,3 +183,24 @@ function! netrw#custom#TogglePreviewMode(isLocal)
    endif
 endfunction
 
+
+"  --------------- "
+"  Create File/Directory
+"  --------------- "
+" TODO
+fu! netrw#custom#NewFileOrDir(path)
+	"let path=expand(a:path)
+	let diri=matchend(a:path,'.*/','')
+	if diri != -1
+		let dir=a:path[:diri-2]
+		let file=a:path[diri:]
+	else
+		let dir=''
+		let file=a:path
+	endif
+
+	if dir != ''
+		call netrw#
+	endif
+
+endfu
