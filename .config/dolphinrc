@@ -12,9 +12,6 @@ eDP1 YPosition 1920x1080=46
 [$Version]
 update_info=dolphin_detailsmodesettings.upd:rename-leading-padding
 
-[CompactMode]
-FontWeight=50
-
 [CreateDialog]
 LastMimeType=application/zip
 
@@ -23,7 +20,6 @@ DefaultProfile=Konsole.profile
 
 [DetailsMode]
 ExpandableFolders=false
-FontWeight=50
 PreviewSize=32
 
 [ExtractDialog]
@@ -39,11 +35,8 @@ LockPanels=false
 ShowZoomSlider=false
 SortingChoice=CaseInsensitiveSorting
 UseTabForSwitchingSplitView=true
-Version=201
+Version=202
 ViewPropsTimestamp=2021,3,24,2,9,27
-
-[IconsMode]
-FontWeight=50
 
 [KFileDialog Settings]
 Places Icons Auto-resize=false
@@ -57,6 +50,7 @@ HDMI-1 Height 1920x1080=535
 HDMI-1 Width 1920x1080=582
 HDMI-2 Height 1920x1080=576
 HDMI-2 Width 1920x1080=525
+HDMI-A-2 Window-Maximized 1920x1080=true
 eDP-1 Height 1920x1080=676
 eDP-1 Width 1920x1080=599
 eDP1 Height 1920x1080=642

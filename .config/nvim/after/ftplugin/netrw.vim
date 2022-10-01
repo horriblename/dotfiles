@@ -15,20 +15,20 @@
 " be any better than just mapping the key binds here
 
 "nmap <buffer> <silent> <nowait> a	<Plug>NetrwHide_a
-nmap <buffer> <silent> <nowait> h	<Plug>NetrwBrowseUpDir
+nmap <buffer><silent><nowait> h	<Plug>NetrwBrowseUpDir
 "nmap <buffer> <silent> <nowait> <c-l>	<Plug>NetrwRefresh
-nmap <buffer> <silent> <nowait> l	<Plug>NetrwLocalBrowseCheck
+nmap <buffer><silent><nowait> l	<Plug>NetrwLocalBrowseCheck
 "nmap <buffer> <silent> <nowait> <c-r>	<Plug>NetrwServerEdit
 "nmap <buffer> <silent> <nowait> d	<Plug>NetrwMakeDir
 "nmap <buffer> <silent> <nowait> mb	<Plug>NetrwBookHistHandler_gb
 
 "  Binding to functions without <Plug> bindings
-nmap <buffer> <silent>  .   :<C-U>call netrw#Call("NetrwHidden", 1)<CR>
+nmap <buffer><silent>  .   :<C-U>call netrw#Call("NetrwHidden", 1)<CR>
 " TODO this only works if g:netrw_keepdir=0, replace getcwd with Netrw's own
 " functions for safety
-nmap <buffer> <silent> r :call netrw#Call("NetrwLocalRename", getcwd())<CR>
+nmap <buffer><silent> r :call netrw#Call("NetrwLocalRename", getcwd())<CR>
 " nmap <buffer> <silent> r :call netrw#Call("NetrwLocalRename", netrw#Call('NetrwGetWord'))<CR>
-nmap <buffer> <silent> R :<C-U>let g:netrw_sort_direction= (g:netrw_sort_direction =~# 'n')? 'r' : 'n'<bar>e<CR>
+nmap <buffer><silent> R :<C-U>let g:netrw_sort_direction= (g:netrw_sort_direction =~# 'n')? 'r' : 'n'<bar>e<CR>
 nmap <buffer> Z :Z 
 
 

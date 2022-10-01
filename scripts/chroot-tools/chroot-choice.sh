@@ -2,6 +2,16 @@
 
 scripts_dir="${HOME}/scripts/chroot-tools"
 
+function chrootwrap() {
+	target=$1
+	shell=$2
+	mount -o bind "$target" "$target"
+
+	export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+	arch-chroot "$target" "$shell"
+	umount "$target"
+}
+
 if [ ! -z "$1" ];then
    echo "args not supported yet..."
    exit
@@ -11,13 +21,13 @@ else
    read ans
    case "$ans" in
       1)
-         ${scripts_dir}/arch-chroot.sh "$HOME/jail/arch"
+         ${scripts_dir}/arch-chroot.sh "$HOME/Jail/arch"
          ;;
       2)
-         sudo ${scripts_dir}/chroot-wrap.sh "$HOME/jail/alpine" "/bin/ash"
+         sudo arch-chroot "$HOME/Jail/alpine" "/bin/ash"
          ;;
       3)
-         sudo ${scripts_dir}/chroot-wrap.sh "$HOME/jail/debian-stable" "/bin/bash"
+         sudo arch-chroot "$HOME/Jail/debian-stable" "/bin/bash"
          ;;
       *)
          printf "\nChoice not recognized"

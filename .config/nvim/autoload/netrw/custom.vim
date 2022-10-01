@@ -5,7 +5,7 @@
 "  TODO consider moving into autoload?
 function! s:NetrwMarkFileBinding()
    let l:filespec = netrw#Call('NetrwGetWord')
-   call netrw#Call('NetrwMarkFile', 1, l:filespec)
+   silent call netrw#Call('NetrwMarkFile', 1, l:filespec)
 endfunction
 
 function! netrw#custom#MarkFileUp( isLocal )
@@ -28,7 +28,7 @@ function! netrw#custom#ListStyleVerbose(isLocal)
       echoerr 'not local session, aborting...'
       return
    endif
-   call netrw#Call("NetrwListStyle", 1)
+   silent call netrw#Call("NetrwListStyle", 1)
    echo get({0: "simple", 1: "info", 2: "compact", 3: "tree"}, w:netrw_liststyle)
    return ""
 endfunction
@@ -38,7 +38,7 @@ function! netrw#custom#SortByVerbose(isLocal)
       echoerr 'not local session, aborting...'
       return
    endif
-   call netrw#Call("NetrwSortStyle", 1)
+   silent call netrw#Call("NetrwSortStyle", 1)
    echo "sort by: ".g:netrw_sort_by
    return ""
 endfunction

@@ -116,13 +116,13 @@ cmd mkln ${{
 }}
 
 cmd fzf_jump ${{
-   res="$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')"
+   res=$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')
    if [ -f "$res" ]; then
       cmd="select"
    elif [ -d "$res" ]; then
       cmd="cd"
    fi
-   lf -remote "send $id $cmd \"$res\""
+   lf -remote "send $id $cmd $res"
 }}
 
 cmd broot_jump ${{
@@ -255,7 +255,7 @@ cmap <backspace> cmd-delete-unix-word
 # File Openers
 map ee $$EDITOR "$f"
 map es $sudo -e "$f"
-map ed $IFS=$'\n' nvim -d $fx
+map ed $IFS=$'\n' nvim -d $fx && lf -remote "send $id unselect"
 map I $view "$f"
 map o $(xdg-open "$f" 1>/dev/null 2>/dev/null & disown)
 map O open_with

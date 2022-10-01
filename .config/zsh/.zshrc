@@ -18,6 +18,16 @@ if [ -z $EDITOR ]; then
 	fi
 fi
 
+function pathadd() {
+	PATH="$1:$PATH"
+	echo "$PATH" | sed -e 's/:/\n/g'
+}
+
+function pathdel() {
+	PATH=$(echo "$PATH" | sed -e "s/$1://")
+	echo "$PATH" | sed -e 's/:/\n/g'
+}
+
 
 # too lazy to deal with theming
 export GTK_THEME=Breeze # Adwaita:dark
@@ -54,6 +64,8 @@ bindkey '^R' history-incremental-pattern-search-backward
 bindkey -M vicmd 'H' vi-beginning-of-line
 bindkey -M vicmd 'L' vi-end-of-line
 bindkey -M vicmd 'Y' vi-yank-eol
+
+bindkey '^[[127;5u' backward-delete-word
 
 # Edit line in vim buffer ctrl-v
 autoload edit-command-line; zle -N edit-command-line
