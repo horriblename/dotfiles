@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# TODO each volume adjustment fires two events by pactl subscribe; can we skip one?
+get_volume() {
+	pactl get-sink-mute @DEFAULT_SINK@ | grep 'yes' > /dev/null && printf -
+	pactl get-sink-volume @DEFAULT_SINK@ | awk 'NR==1{sub("%", "", $5); print $5}'
+}
+
+get_volume
+
+pactl subscribe | while read line; do [ -z "${line##*sink*}" ] && get_volume; done
