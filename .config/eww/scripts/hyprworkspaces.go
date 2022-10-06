@@ -8,6 +8,10 @@
  **/
 package main
 
+// TODO: race conditions exist: do not use hyprctl for queries and track
+// workspace state completely internally using only info from socket2
+// plus hyprctl is probably a speed bottleneck
+
 import (
 	"encoding/json"
 	"fmt"
@@ -109,6 +113,11 @@ func (hs *hyprState) workspacesChanged(focus int) {
 		focus = index(hs.workspaces, FOCUSED)
 		// TODO: handle no previous focus
 	}
+	// try harder to not break
+	if focus >= len(ws) {
+		// TODO this is so jank
+		focus = len(ws) - 1
+	}
 
 	ws[focus] = FOCUSED
 
@@ -120,7 +129,7 @@ func (hs *hyprState) workspacesChanged(focus int) {
 	printJson(ws)
 }
 
-func handleHyprEvents(conn net.Conn, evChan chan<- event) {
+func handleHyprEvents(conn net.Conn, hs *hyprState) {
 	for {
 		var buf [1024]byte
 		n, err := conn.Read(buf[:])
@@ -136,48 +145,17 @@ func handleHyprEvents(conn net.Conn, evChan chan<- event) {
 				continue
 			}
 			sep := strings.Index(msg, ">>")
-			if sep == -1 {
+			if sep == -1 { // TODO idk why there's so many empty messages
 				log.Printf("WARN: skipping invalid message: %s", msg)
 				continue
 			}
 
-			ev := msg[:sep]
-			data := msg[sep+2:]
-
-			evChan <- event{ev, data}
-		}
-
-	}
-}
-
-func startServer() {
-	evChan := make(chan event, 100)
-	hs := hyprState{
-		workspaces: make([]workspaceState, PERSISTENT_WORKSPACES),
-	}
-
-	currws, err := hyprqueryActiveWindow()
-	if err != nil {
-		log.Printf("Error getting active window: %s", err)
-	} else if currws.Workspace.Id < 1 {
-		currws.Workspace.Id = 1
-	}
-	hs.workspacesChanged(currws.Workspace.Id - 1)
-
-	printJson(hs.workspaces)
-
-	conn := connect(gHyprlandSockPath)
-	defer conn.Close()
-
-	go handleHyprEvents(conn, evChan)
-
-	for { // TODO terminate
-		select {
-		case ev := <-evChan:
-
-			if strings.HasSuffix(ev.name, "workspace") || ev.name == "focusedmon" || ev.name == "closewindow" ||
-				ev.name == "movewindow" {
+			ev := event{
+				msg[:sep],
+				msg[sep+2:],
 			}
+
+			// evChan <- event{ev, data}
 
 			switch ev.name {
 			case "workspace":
@@ -203,7 +181,29 @@ func startServer() {
 
 			}
 		}
+
 	}
+}
+
+func startServer() {
+	hs := hyprState{
+		workspaces: make([]workspaceState, PERSISTENT_WORKSPACES),
+	}
+
+	currws, err := hyprqueryActiveWindow()
+	if err != nil {
+		log.Printf("Error getting active window: %s", err)
+	} else if currws.Workspace.Id < 1 {
+		currws.Workspace.Id = 1
+	}
+	hs.workspacesChanged(currws.Workspace.Id - 1)
+
+	printJson(hs.workspaces)
+
+	conn := connect(gHyprlandSockPath)
+	defer conn.Close()
+
+	handleHyprEvents(conn, &hs)
 }
 
 func main() {
@@ -225,6 +225,7 @@ func main() {
 	log.Printf("logging started")
 
 	startServer()
+	log.Printf("bye!")
 
 	// flag.Parse()
 	// cmd := flag.Args()
