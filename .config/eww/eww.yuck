@@ -29,6 +29,10 @@
       :initial `scripts/check-network`
       `scripts/check-network`)
 
+(deflisten volumeIn
+        :initial `100`
+        `scripts/volume-listener`)
+
 (deflisten volumeOut 
         :initial `100`
         `scripts/volume-listener`)
@@ -46,9 +50,9 @@
          (label :text {datetime.time})))
 
 (defwidget _network []
-        ( box :class "sys-item net-box"
-         (label :text {netIcons[netStat.type]} 
-          :tooltip {netStat.name})))
+			  ( box :class "sys-item net-box"
+					  (label :text {netIcons[netStat.type]} 
+								:tooltip {netStat.name})))
 
 (defwidget _battery [battery status one two three four five six seven charge]
         (box :class "bat-box" :space-evenly false :spacing 8
@@ -61,47 +65,47 @@
                        battery < 95 ? two : one})))
 
 (defwidget _speaker []
-        (eventbox :class "sys-item speaker-box"
-         :onscroll `pactl set-sink-volume @DEFAULT_SINK@ $([ {} = up ] && echo + || echo -)4%`
-         :onhover "${EWW_CMD} update VolOutScaleShow=true"
-         :onhoverlost "${EWW_CMD} update VolOutScaleShow=false"
-         :onrightclick "pavucontrol"
-         (box :orientation 'h'
-          :space-evenly false
-          (revealer :transition "slideleft"
-           :reveal VolOutScaleShow
-           :duration "550ms"
-           (_volOutSlider))
-          (button :onclick  `pactl set-sink-mute @DEFAULT_SINK@ toggle`
-           { volumeOut < 0 ? audioIcons[0] : 
-            volumeOut < 30 ? audioIcons[1] :
-            volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))))
+			  (eventbox :class "sys-item speaker-box"
+							:onscroll `pactl set-sink-volume @DEFAULT_SINK@ $([ {} = up ] && echo + || echo -)4%`
+							:onhover "${EWW_CMD} update VolOutScaleShow=true"
+							:onhoverlost "${EWW_CMD} update VolOutScaleShow=false"
+							:onrightclick "pavucontrol"
+							(box :orientation 'h'
+								  :space-evenly false
+								  (revealer :transition "slideleft"
+												:reveal VolOutScaleShow
+												:duration "550ms"
+												(_volOutSlider))
+								  (button :onclick  `pactl set-sink-mute @DEFAULT_SINK@ toggle`
+											 { volumeOut < 0 ? audioIcons[0] : 
+											 volumeOut < 30 ? audioIcons[1] :
+											 volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))))
 
 (defwidget _microphone []
-        (eventbox :class "sys-item mic-box"
-         :onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
-         :onhover "${EWW_CMD} update VolInScaleShow=true"
-         :onhoverlost "${EWW_CMD} update VolInScaleShow=false"
-         :onrightclick "pavucontrol"
-         (box :orientation 'h'
-          :space-evenly false
-          (revealer :transition "slideleft"
-           :reveal VolInScaleShow
-           :duration "550ms"
-           (_volInSlider))
-          (button :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
-           { volumeOut > 0 ? micIcons[1] : micIcons [0]}))))
+			  (eventbox :class "sys-item mic-box"
+							:onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
+							:onhover "${EWW_CMD} update VolInScaleShow=true"
+							:onhoverlost "${EWW_CMD} update VolInScaleShow=false"
+							:onrightclick "pavucontrol"
+							(box :orientation 'h'
+								  :space-evenly false
+								  (revealer :transition "slideleft"
+												:reveal VolInScaleShow
+												:duration "550ms"
+												(_volInSlider))
+								  (button :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
+											 { volumeOut > 0 ? micIcons[1] : micIcons [0]}))))
 
 (defwidget _volOutSlider []
-        (scale :class "vol-out-bar"
-         :flipped false
-         :marks false
-         :round-digits 0
-         :value { volumeOut < 0 ? -volumeOut : volumeOut}
-         :min 0
-         :max 100
-         ;; :onchange `pactl set-sink-volume @DEFAULT_SINK@ {}%`
-         :orientation 'h'))
+			  (scale :class "vol-out-bar"
+						:flipped true
+						:marks false
+						:round-digits 0
+						:value { volumeOut < 0 ? -volumeOut : volumeOut}
+						:min 0
+						:max 100
+						:onchange `pactl set-sink-volume @DEFAULT_SINK@ {}%`
+						:orientation 'h'))
 
 (defwidget _volInSlider []
         (scale :class "vol-in-bar"
@@ -111,22 +115,48 @@
          :value { volumeOut < 0 ? -volumeOut : volumeOut}
          :min 0
          :max 100
-         ;; :onchange `pactl set-soutce-volume @DEFAULT_SOURCE@ {}%`
+         :onchange `pactl set-source-volume @DEFAULT_SOURCE@ {}%`
          :orientation 'h'))
+
+;; TODO cleanup: keep either the one above or the one below
+;; Testing: mic and speaker bars stacked
+(defwidget _audio []
+			  (eventbox :class "sys-item mic-box"
+							:onhover "${EWW_CMD} update VolInScaleShow=true" :onhoverlost "${EWW_CMD} update VolInScaleShow=false"
+							:onrightclick "pavucontrol"
+							(box :orientation 'h'
+								  :spacing 5
+								  :space-evenly false
+								  (eventbox :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
+												:visible { volumeIn > 0 }
+												:onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
+												{ volumeIn > 0 ? micIcons[1] : micIcons [0]})
+								  (revealer :transition "slideleft"
+												:reveal VolInScaleShow
+												:duration "550ms"
+												(_volumeSliders))
+								  (eventbox :onclick  `pactl set-sink-mute @DEFAULT_SINK@ toggle`
+												:onscroll `pactl set-sink-volume @DEFAULT_SINK@ $([ {} = up ] && echo + || echo -)4%`
+											 { volumeOut < 0 ? audioIcons[0] : 
+											 volumeOut < 30 ? audioIcons[1] :
+											 volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))))
+
+
+(defwidget _volumeSliders []
+			  (box :class "vol-bar-box" :orientation "v"
+					 (_volOutSlider)
+					 (_volInSlider)))
 
 (defwidget _memUsage []
         (box :class "sys-item ram-box" :vexpand "false" :hexpand "false" 
          (circular-progress :value {EWW_RAM.used_mem_perc}
           :class "mem-meter"
           :start-at 25
-          :thickness 14
+          :thickness 16
           (button 
            :class "iconram"
-           :limit-width 2
            :tooltip "RAM ${round(EWW_RAM.used_mem_perc, 0)}%"
            :onclick "notify-send test"
-           :show_truncated false
-           :wrap false
            ""))))
 
 (defwidget _cpuUsage []
@@ -134,14 +164,11 @@
          (circular-progress :value {EWW_CPU.avg}
           :class "cpu-meter"
           :start-at 25
-          :thickness 14
+          :thickness 16
           (button 
            :class "iconcpu"
-           :limit-width 2
            :tooltip "CPU ${round(EWW_CPU.avg, 2)}%" 
            :onclick "notify-send test"
-           :show_truncated false
-           :wrap false
            ""))))
 
 (defwidget workspace [ws]
@@ -174,9 +201,11 @@
          :space-evenly false
          :halign "end"
          :spacing 5
-         (_microphone)
-         sep
-         (_speaker)
+         ;; (_microphone)
+         ;; sep
+         ;; (_speaker)
+			(_audio)
+
          sep
          (_network)
          sep
