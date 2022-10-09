@@ -31,6 +31,8 @@ fu! user#mapping#resetup()
 	inoremap <C-l> <Right>
 	inoremap <C-h> <Left>
 
+	vnoremap ga gg0oG$
+
 	" surround with parenthesis. Using register "z to not interfere with clipboard
 	xmap S <Nop>
 	xnoremap S( "zs()<Esc>"zPgvlOlO<Esc>
