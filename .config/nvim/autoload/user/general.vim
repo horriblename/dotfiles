@@ -48,6 +48,8 @@ fu! user#general#resetup()
 		augroup END
 	endif
 
+    au TextYankPost * silent! lua vim.highlight.on_yank()
+
 	" Basic settings
 	set mouse=a
 	syntax on
@@ -67,9 +69,7 @@ fu! user#general#resetup()
 	" Appearance
 	set number relativenumber
 	set termguicolors
-	" apply some color changes in case colorscheme is not found (place before
-	" colorscheme  command)
-	highlight VertSplit guifg=#c2bfa5 gui=none cterm=reverse
+	"highlight VertSplit guifg=#c2bfa5 gui=none cterm=reverse
 	set scrolloff=5
 	set cursorline
 	set lazyredraw
@@ -86,6 +86,8 @@ fu! user#general#resetup()
 	" keyboard layout switching
 	nnoremap <leader>y :set langmap=yYzZ\\"§&/()=?`ü+öä#-Ü*ÖÄ'\\;:_;zZyY@#^&*()_+[]\\;'\\\\/{}:\\"\\|\\<\\>?<cr>
 	nnoremap <leader>z :set langmap=<cr>
+
+	lua vim.unload_module = function (mod) package.loaded[mod] = nil end
 
 	" Fix splitting
 	set splitbelow splitright
@@ -176,7 +178,8 @@ fu! Zlua(pattern)
 	elseif &ft == "NvimTree"
 		execute "cd ".dir
 	else
-		return dir
+		execute "cd ".dir
+		echo dir
 	endif
 endfun
 

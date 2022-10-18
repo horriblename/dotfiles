@@ -1,3 +1,7 @@
+if !get(g:, 'neovide', 0)
+	finish
+endif
+
 let g:neovide_cursor_animation_length=0.13
 let g:neovide_cursor_trail_length=0.8
 set guifont=FiraCode\ Nerd\ Font:h12

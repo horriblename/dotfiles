@@ -127,7 +127,10 @@ zle-line-init() {
 zle -N zle-line-init
 
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
-precmd() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+precmd() {
+	echo -ne '\e[5 q'
+	echo -ne "\e]133;A\e\\"
+} # Use beam shape cursor for each new prompt.
 
 # Control bindings for programs
 #bindkey -s "^g" "lc\n"

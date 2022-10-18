@@ -128,7 +128,7 @@
 								  :spacing 5
 								  :space-evenly false
 								  (eventbox :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
-												:visible { volumeIn > 0 }
+												:visible { volumeIn > 0 || VolInScaleShow }
 												:onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
 												{ volumeIn > 0 ? micIcons[1] : micIcons [0]})
 								  (revealer :transition "slideleft"

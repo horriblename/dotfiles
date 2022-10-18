@@ -76,7 +76,7 @@ function! netrw#custom#ClipboardPaste(isLocal)
       call system(baseCmd.' "'. file.'" "'.dest.'"')
    endfor
 
-   return "refresh"
+   return ["refresh"]
 endfunction
 
 " Set/unset a paste action through g:netrw_pasteaction and select a file under
@@ -136,17 +136,17 @@ endfunction
 
 function! netrw#custom#CreateSymLink(isLocal)
    call s:CreateLink('-s')
-   return "refresh"
+   return ["refresh"]
 endfunction
 
 function! netrw#custom#CreateRelLink(isLocal)
    call s:CreateLink('-sr')
-   return "refresh"
+   return ["refresh"]
 endfunction
 
 function! netrw#custom#CreateHardLink(isLocal)
    call s:CreateLink('-h')
-   return "refresh"
+   return ["refresh"]
 endfunction
 
 " Copy File location

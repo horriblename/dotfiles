@@ -1,10 +1,12 @@
 /*
  * Hyprland Workspaces
- * Listens on hyprland socket and writes workspace state when needed, in json format
+ * Listens on hyprland socket and writes workspace state to stdout when needed, in json format
  * Example output:
  *		[{ "index": 0, "state": 2}, { "index": 1, "state": 1}]
  *
- * key "state" meaning can be found in `workspaceState`
+ * Meaning of the key "state" can be found in `workspaceState` type constants
+ * 
+ * To modify the output format, change the `printJson` function
  **/
 package main
 

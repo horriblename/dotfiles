@@ -7,8 +7,8 @@ let mapleader=" "
 " call this function directly to re-setup
 fu! user#mapping#resetup()
 	" Fixing unintuitive keybind behaviour
-	vnoremap > >gv
-	vnoremap < <gv
+	xnoremap > >gv
+	xnoremap < <gv
 
 	nmap <C-W>>  <C-W>><C-W>
 	nmap <C-W><  <C-W><<C-W>
@@ -18,7 +18,7 @@ fu! user#mapping#resetup()
 	vnoremap <Tab>    >gv
 	vnoremap <S-Tab>  <gv
 
-	noremap! <C-backspace> <C-w>
+	noremap! <C-BS> <C-w>
 
 	tnoremap <M-C-N> <C-\><C-n>
 	tnoremap <M-C-V> <cmd>put "<CR>
@@ -31,7 +31,9 @@ fu! user#mapping#resetup()
 	inoremap <C-l> <Right>
 	inoremap <C-h> <Left>
 
-	vnoremap ga gg0oG$
+	xnoremap ga gg0oG$
+
+	xnoremap X "_x
 
 	" surround with parenthesis. Using register "z to not interfere with clipboard
 	xmap S <Nop>

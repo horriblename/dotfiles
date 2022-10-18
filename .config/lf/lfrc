@@ -7,6 +7,7 @@ set hidden true
 #set shell /usr/bin/sh
 #set drawbox true
 set incsearch true
+set incfilter true
 set icons true
 set ignorecase true
 set truncatechar "…"
@@ -224,8 +225,7 @@ cmd trash &{{
       lf -remote "send $id echo $failed files not moved to trash; last error msg"
    fi
 
-   lf -remote "send $id unselect"
-	lf -remote "send $id reload"
+   lf -remote "send $id :unselect; up; reload"
 }}
 
 cmd clear_trash %trash-empty
