@@ -1,0 +1,3 @@
+[submodule ".config/nvim/.config/nvim/pack/mbbill/start/undotree"]
+	path = .config/nvim/.config/nvim/pack/mbbill/start/undotree
+	url = https://github.com/mbbill/undotree
