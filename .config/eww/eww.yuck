@@ -10,7 +10,7 @@
 (defvar wsPersistent 6)
 (defvar audioIcons `["婢", "奄", "奔", "墳"]`)
 (defvar micIcons `["",""]`)
-(defvar netIcons `{"wifi": "" , "ethernet": "", "unknown": "", "disconnected": ""}`)
+(defvar netIcons `{"wifi": " " , "ethernet": "", "unknown": "", "disconnected": ""}`)
 (defvar dayOfWeek `["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]`)
 (defvar sep "|")
 
@@ -37,64 +37,30 @@
         :initial `100`
         `scripts/volume-listener`)
 
-(deflisten wsState :initial ""
-        `scripts/hyprworkspaces`)
+(deflisten wsState 
+  :initial "[]"
+  `scripts/hyprworkspaces`)
 
 ;; ---------------------
 ;; Widget definitions
 ;; ---------------------
 
+(defwidget _calendar_applet []
+  (eventbox :onhoverlost "${EWW_CMD} close calendar_win"
+            :class "calendar"
+            (calendar :show-details true
+                      :show-heading true)))
+
 (defwidget _clock []
-        (box :class "clock" :spacing 5
-         :tooltip "${dayOfWeek[datetime.dayOfWeek]}, ${datetime.date}"
-         (label :text {datetime.time})))
+  (eventbox :class "clock"
+            :onclick "${EWW_CMD} open calendar_win"
+       :tooltip "${dayOfWeek[datetime.dayOfWeek]}, ${datetime.date}"
+       (label :text {datetime.time})))
 
 (defwidget _network []
 			  ( box :class "sys-item net-box"
 					  (label :text {netIcons[netStat.type]} 
 								:tooltip {netStat.name})))
-
-(defwidget _battery [battery status one two three four five six seven charge]
-        (box :class "bat-box" :space-evenly false :spacing 8
-         (label :text { status == 'Carging' ? charge :
-                       battery < 15 ? seven :
-                       battery < 30 ? six :
-                       battery < 45 ? five :
-                       battery < 60 ? four :
-                       battery < 75 ? three :
-                       battery < 95 ? two : one})))
-
-(defwidget _speaker []
-			  (eventbox :class "sys-item speaker-box"
-							:onscroll `pactl set-sink-volume @DEFAULT_SINK@ $([ {} = up ] && echo + || echo -)4%`
-							:onhover "${EWW_CMD} update VolOutScaleShow=true"
-							:onhoverlost "${EWW_CMD} update VolOutScaleShow=false"
-							:onrightclick "pavucontrol"
-							(box :orientation 'h'
-								  :space-evenly false
-								  (revealer :transition "slideleft"
-												:reveal VolOutScaleShow
-												:duration "550ms"
-												(_volOutSlider))
-								  (button :onclick  `pactl set-sink-mute @DEFAULT_SINK@ toggle`
-											 { volumeOut < 0 ? audioIcons[0] : 
-											 volumeOut < 30 ? audioIcons[1] :
-											 volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))))
-
-(defwidget _microphone []
-			  (eventbox :class "sys-item mic-box"
-							:onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
-							:onhover "${EWW_CMD} update VolInScaleShow=true"
-							:onhoverlost "${EWW_CMD} update VolInScaleShow=false"
-							:onrightclick "pavucontrol"
-							(box :orientation 'h'
-								  :space-evenly false
-								  (revealer :transition "slideleft"
-												:reveal VolInScaleShow
-												:duration "550ms"
-												(_volInSlider))
-								  (button :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
-											 { volumeOut > 0 ? micIcons[1] : micIcons [0]}))))
 
 (defwidget _volOutSlider []
 			  (scale :class "vol-out-bar"
@@ -118,28 +84,34 @@
          :onchange `pactl set-source-volume @DEFAULT_SOURCE@ {}%`
          :orientation 'h'))
 
-;; TODO cleanup: keep either the one above or the one below
-;; Testing: mic and speaker bars stacked
+(defwidget _micIcon []
+  (eventbox :class 'mic-icon'
+            :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
+            :visible { volumeIn > 0 || VolInScaleShow }
+            :onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
+            { volumeIn > 0 ? micIcons[1] : micIcons [0]})
+  )
+
+(defwidget _speakerIcon []
+  (eventbox :class 'speaker-icon'
+            :onclick  `pactl set-sink-mute @DEFAULT_SINK@ toggle`
+            :onscroll `pactl set-sink-volume @DEFAULT_SINK@ $([ {} = up ] && echo + || echo -)4%`
+            { volumeOut < 0 ? audioIcons[0] : 
+            volumeOut < 30 ? audioIcons[1] :
+            volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))
+
 (defwidget _audio []
-			  (eventbox :class "sys-item mic-box"
+			  (eventbox :class "sys-item audio-box"
 							:onhover "${EWW_CMD} update VolInScaleShow=true" :onhoverlost "${EWW_CMD} update VolInScaleShow=false"
 							:onrightclick "pavucontrol"
 							(box :orientation 'h'
-								  :spacing 5
 								  :space-evenly false
-								  (eventbox :onclick  `pactl set-source-mute @DEFAULT_SOURCE@ toggle`
-												:visible { volumeIn > 0 || VolInScaleShow }
-												:onscroll `pactl set-source-volume @DEFAULT_SOURCE@ $([ {} = up ] && echo + || echo -)4%`
-												{ volumeIn > 0 ? micIcons[1] : micIcons [0]})
+								  (_micIcon)
 								  (revealer :transition "slideleft"
 												:reveal VolInScaleShow
 												:duration "550ms"
 												(_volumeSliders))
-								  (eventbox :onclick  `pactl set-sink-mute @DEFAULT_SINK@ toggle`
-												:onscroll `pactl set-sink-volume @DEFAULT_SINK@ $([ {} = up ] && echo + || echo -)4%`
-											 { volumeOut < 0 ? audioIcons[0] : 
-											 volumeOut < 30 ? audioIcons[1] :
-											 volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))))
+								  (_speakerIcon))))
 
 
 (defwidget _volumeSliders []
@@ -152,9 +124,9 @@
          (circular-progress :value {EWW_RAM.used_mem_perc}
           :class "mem-meter"
           :start-at 25
-          :thickness 16
+          :thickness 15
           (button 
-           :class "iconram"
+           :class "icon-ram"
            :tooltip "RAM ${round(EWW_RAM.used_mem_perc, 0)}%"
            :onclick "notify-send test"
            ""))))
@@ -164,9 +136,9 @@
          (circular-progress :value {EWW_CPU.avg}
           :class "cpu-meter"
           :start-at 25
-          :thickness 16
+          :thickness 15
           (button 
-           :class "iconcpu"
+           :class "icon-cpu"
            :tooltip "CPU ${round(EWW_CPU.avg, 2)}%" 
            :onclick "notify-send test"
            ""))))
@@ -181,13 +153,13 @@
 
 (defwidget workspaces []
   (eventbox :class "workspaces"
-        :orientation "h"
-        :halign "start"
-        :spacing 10
-        :onscroll "hyprctl dispatch workspace $([ {} = up ] && echo -1 || echo +1)"
-        (box
-          (for ws in wsState
-           (workspace :ws ws)))))
+            :orientation "h"
+            :halign "start"
+            :spacing 10
+            :onscroll "hyprctl dispatch workspace $([ {} = up ] && echo -1 || echo +1)"
+            (box
+              (for ws in wsState
+                   (workspace :ws ws)))))
 
 (defwidget barleft []
         (box :orientation "h"
@@ -197,33 +169,35 @@
          (workspaces)))
 
 (defwidget system []
-        (box :orientation "h"
-         :space-evenly false
-         :halign "end"
-         :spacing 5
-         ;; (_microphone)
-         ;; sep
-         ;; (_speaker)
-			(_audio)
-
-         sep
-         (_network)
-         sep
-         (_memUsage)
-         sep
-         (_cpuUsage)))
+  (box :orientation "h"
+       :space-evenly false
+       :halign "end"
+       :spacing 5
+       (_audio)
+       sep
+       (_network)
+       sep
+       (_memUsage)
+       sep
+       (_cpuUsage)))
 
 
 (defwidget trays []
-        (box :orientation "h"
-         :space-evenly false
-         :halign "end"
-         :spacing 1
-         (system)))
+  (box :orientation "h"
+       :space-evenly false
+       :halign "end"
+       :spacing 1
+       (system)))
 
 ;; ---------------------
 ;; Window definitions
 ;; ---------------------
+
+(defwindow calendar_win
+  :monitor 0
+  :geometry (geometry :y 32
+                      :anchor "top center")
+  (_calendar_applet))
 
 (defwindow bar
         :monitor 0

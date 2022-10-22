@@ -14,6 +14,8 @@ set truncatechar "…"
 set mouse on
 #set cleaner ~/.config/lf/cleaner
 
+cmd on-cd $ printf '\033]0;%s\007' "${PWD##*/}/" 
+
 map sudo $(sudo lf -config="$HOME/.config/lf/lfrc" -command 'set drawbox true')
 
 # Custom Functions
@@ -260,7 +262,7 @@ map I $view "$f"
 map o $(xdg-open "$f" 1>/dev/null 2>/dev/null & disown)
 map O open_with
 map cv $(code "$PWD")
-map cd &(LF_LEVEL=0 konsole -e "lf $PWD")
+map cd &(LF_LEVEL=0 ${term:-konsole} -e "lf $PWD")
 
 # Archive Mappings
 map Az zip

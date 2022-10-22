@@ -128,9 +128,9 @@ zle -N zle-line-init
 
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 precmd() {
-	echo -ne '\e[5 q'
+	echo -ne '\e[5 q' # Use beam shape cursor for each new prompt.
 	echo -ne "\e]133;A\e\\"
-} # Use beam shape cursor for each new prompt.
+}
 
 # Control bindings for programs
 #bindkey -s "^g" "lc\n"
@@ -161,8 +161,10 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 _ZL_CD=pushd
 eval "$(lua ~/scripts/z.lua --init zsh enhanced)"
 
-# Manually set title
+# Set title to 'zsh'
 _title_precmd(){ echo -ne '\e]0;zsh\007' }
+
+# Set title to running program
 _title_preexec() { echo -ne "\e]0;${1%% *}\007" }
 
 typeset -ga precmd_functions

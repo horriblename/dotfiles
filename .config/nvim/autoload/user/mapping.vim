@@ -1,5 +1,6 @@
+" vim: foldmethod=marker
 fu! user#mapping#setup()
-  " dummy function
+	" dummy function
 endfu
 
 let mapleader=" "
@@ -7,6 +8,7 @@ let mapleader=" "
 " call this function directly to re-setup
 fu! user#mapping#resetup()
 	" Fixing unintuitive keybind behaviour
+	" Editor mappings {{{
 	xnoremap > >gv
 	xnoremap < <gv
 
@@ -21,7 +23,7 @@ fu! user#mapping#resetup()
 	noremap! <C-BS> <C-w>
 
 	tnoremap <M-C-N> <C-\><C-n>
-	tnoremap <M-C-V> <cmd>put "<CR>
+	tnoremap <M-C-V> <cmd>put<CR>
 
 	noremap H ^
 	noremap L g_
@@ -35,6 +37,7 @@ fu! user#mapping#resetup()
 
 	xnoremap X "_x
 
+	nnoremap S :%s##gI<Left><Left><Left>
 	" surround with parenthesis. Using register "z to not interfere with clipboard
 	xmap S <Nop>
 	xnoremap S( "zs()<Esc>"zPgvlOlO<Esc>
@@ -51,17 +54,17 @@ fu! user#mapping#resetup()
 	xnoremap S* "zs**<Esc>"zPgvlOlO<Esc>
 	nnoremap daa "zd%:let @z=@z[1:-2]<cr>"zP
 
-	"noremap <F1> <Esc>
-	noremap! <C-j> <C-n>
-	noremap! <C-k> <C-p>
+	" keyboard layout switching
+	nnoremap <leader>y :set langmap=yYzZ\\"§&/()=?`ü+öä#-Ü*ÖÄ'\\;:_;zZyY@#^&*()_+[]\\;'\\\\/{}:\\"\\|\\<\\>?<cr>
+	nnoremap <leader>z :set langmap=<cr>
+	" }}}
 
+	" Window Management {{{
 	silent! nnoremap <leader>h :split<CR>
 	silent! nnoremap <leader>v :vsplit<CR>
 
 	silent! nnoremap <unique> <leader>e :25Lexplore<CR>
 	silent! nnoremap <unique> <leader>f :find 
-
-	nnoremap S :%s##gI<Left><Left><Left>
 
 	nnoremap <leader>q :q<CR>
 	nnoremap <leader>Q :q!
@@ -116,7 +119,7 @@ fu! user#mapping#resetup()
 		exec 'tnoremap <M-' . i . '> <C-\><C-n>:' . i . 'tabnext<CR>'
 	endfor
 	noremap <M-9> :$tabnext<CR>
-
+	" }}}
 
 	nnoremap <silent> <leader>u :UndotreeToggle <bar> UndotreeFocus<CR>
 endfu

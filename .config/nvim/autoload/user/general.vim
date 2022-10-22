@@ -1,3 +1,4 @@
+" vim: foldmethod=marker
 " Putting this in autoload to allow for more fine-grained control over execution sequence,
 " This is especially useful for sourcing these configs before lunarvim
 " To 'source' this config:
@@ -12,45 +13,8 @@ endfu
 
 " call this function directly to re-setup
 fu! user#general#resetup()
-	set path-=/usr/include
-	set path+=**
-	" Use system clipboard, change to unnamed for vim
-	if has('nvim')
-		set clipboard=unnamedplus
-	else
-		set clipboard=unnamed
-	endif
-
-	" Remove trailing whitespace on save
-	"autocmd BufWritePre * %s/\s\+$//e
-
-	silent! nnoremap <leader>n :call SmartNewWin()<CR>
-
-	" inoremap <silent> <Tab>  <C-R>=Tab_Or_Complete()<CR>
-	" inoremap <silent> <CR>   <C-R>=pumvisible()? "\<lt>C-Y>" : "\<lt>CR>"<CR>
-
-	noremap <a-i> :<c-u>call <sid>GotoNextFloat(1)<cr>
-	noremap <a-o> :<c-u>call <sid>GotoNextFloat(0)<cr>
-
-	command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
-
-	" Save file as sudo when no sudo permissions
-	command Sudowrite execute 'write ! sudo tee %' <bar> edit!
-	" CDC = Change to Directory of Current file
-	command CDC cd %:p:h
-
-	if has('nvim')
-		augroup TerminalTweaks
-			au!
-			au TermOpen * setlocal listchars= nonumber norelativenumber statusline=%{b:term_title}
-			au TermOpen * let b:term_title=substitute(b:term_title,'.*:','',1) | startinsert
-			au BufEnter,BufWinEnter,WinEnter term://* if nvim_win_get_cursor(0)[0] > line('$') - nvim_win_get_height(0) | startinsert | endif
-		augroup END
-	endif
-
-    au TextYankPost * silent! lua vim.highlight.on_yank()
-
 	" Basic settings
+	" {{{
 	set mouse=a
 	syntax on
 	set ignorecase
@@ -69,28 +33,56 @@ fu! user#general#resetup()
 	" Appearance
 	set number relativenumber
 	set termguicolors
-	"highlight VertSplit guifg=#c2bfa5 gui=none cterm=reverse
 	set scrolloff=5
 	set cursorline
 	set lazyredraw
 	set cmdheight=2
 	set noshowmode
+	set splitbelow splitright
 	set matchpairs+=<:>,*:*,`:`
 	set list listchars=tab:\ \ ,trail:·
 
-	" Autocompletion
-	"set wildmode=longest,list,full
+	augroup SetListChars
+		au!
+		au OptionSet expandtab if &expandtab | set listchars=tab:→\ ,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
+	augroup END
+
 	set wildmode=longest,full
 	set wildmenu
 
-	" keyboard layout switching
-	nnoremap <leader>y :set langmap=yYzZ\\"§&/()=?`ü+öä#-Ü*ÖÄ'\\;:_;zZyY@#^&*()_+[]\\;'\\\\/{}:\\"\\|\\<\\>?<cr>
-	nnoremap <leader>z :set langmap=<cr>
+	set path-=/usr/include
+	set path+=**
+	" Use system clipboard, change to unnamed for vim
+	if has('nvim')
+		set clipboard=unnamedplus
+	else
+		set clipboard=unnamed
+	endif
+	" }}}
 
-	lua vim.unload_module = function (mod) package.loaded[mod] = nil end
+	silent! nnoremap <leader>n :call SmartNewWin()<CR>
 
-	" Fix splitting
-	set splitbelow splitright
+	noremap <a-i> :<c-u>call <sid>GotoNextFloat(1)<cr>
+	noremap <a-o> :<c-u>call <sid>GotoNextFloat(0)<cr>
+
+	command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
+
+	" Save file as sudo when no sudo permissions
+	command Sudowrite execute 'write ! sudo tee %' <bar> edit!
+	" CDC = Change to Directory of Current file
+	command CDC cd %:p:h
+
+	if has('nvim')
+		augroup TerminalTweaks
+			au!
+			au TermOpen * setlocal nolist nonumber norelativenumber statusline=%{b:term_title}
+			au TermOpen * let b:term_title=substitute(b:term_title,'.*:','',1) | startinsert
+			au BufEnter,BufWinEnter,WinEnter term://* if nvim_win_get_cursor(0)[0] > line('$') - nvim_win_get_height(0) | startinsert | endif
+		augroup END
+
+		au TextYankPost * silent! lua vim.highlight.on_yank()
+		lua vim.unload_module = function (mod) package.loaded[mod] = nil end
+	endif
 
 	" auto load ft plugins (vim compatibility) 
 	filetype plugin on
@@ -98,6 +90,7 @@ fu! user#general#resetup()
 	let g:markdown_folding = 1
 endfu
 
+" function definitions {{{
 fu! SmartNewWin()
 	let l:whratio=4
 	let l:wininfo=getwininfo(win_getid())[0]
@@ -111,15 +104,6 @@ fu! SmartNewWin()
 	endif
 endfu
 
-" autocomplete
-fu! Tab_Or_Complete()
-  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-	 return "\<C-N>"
-  else
-	 return "\<Tab>"
-  endif
-endfunction
-
 " focus the first floating window found
 fu! s:GotoFirstFloat() abort
   for w in range(1, winnr('$'))
@@ -128,7 +112,7 @@ fu! s:GotoFirstFloat() abort
 		execute w . 'wincmd w'
 	 endif
   endfor
-endfunction
+endfu
 
 fu! s:GotoNextFloat(reverse) abort
 	if !has("nvim")
@@ -198,5 +182,6 @@ fu! ZluaComp(ArgLead, CmdLine, CursorPos)
 	let l=reverse(systemlist(zlua.' --complete '.a:ArgLead))
 	return map(l, {_, val -> substitute(val, "^[^/]*", "", "")})
 endfun
+" }}}
 
 call user#general#resetup()

@@ -1,12 +1,22 @@
 /*
  * Hyprland Workspaces
+ * -------------------
+ *
  * Listens on hyprland socket and writes workspace state to stdout when needed, in json format
  * Example output:
  *		[{ "index": 0, "state": 2}, { "index": 1, "state": 1}]
  *
  * Meaning of the key "state" can be found in `workspaceState` type constants
- * 
+ *
+ * Modifying/Scripting
+ * -------------------
+ *
  * To modify the output format, change the `printJson` function
+ *
+ * ...Why not bash?
+ * ----------------
+ *
+ * Well the bash script I was using was lagging ever so slightly and it irked me enough to rewrite it in go
  **/
 package main
 
@@ -40,10 +50,8 @@ const (
 )
 
 type hyprState struct {
-	// context
-	// activewindow  struct{ class, title string }
 	workspaces []workspaceState
-	// quakeOnScreen bool
+	changed    bool
 }
 
 type server struct {
@@ -128,7 +136,7 @@ func (hs *hyprState) workspacesChanged(focus int) {
 	}
 
 	hs.workspaces = ws
-	printJson(ws)
+	hs.changed = true
 }
 
 func handleHyprEvents(conn net.Conn, hs *hyprState) {
@@ -157,8 +165,6 @@ func handleHyprEvents(conn net.Conn, hs *hyprState) {
 				msg[sep+2:],
 			}
 
-			// evChan <- event{ev, data}
-
 			switch ev.name {
 			case "workspace":
 				if ws, err := strconv.Atoi(ev.arg); err == nil {
@@ -184,6 +190,9 @@ func handleHyprEvents(conn net.Conn, hs *hyprState) {
 			}
 		}
 
+		if hs.changed {
+			hs.printJson()
+		}
 	}
 }
 
@@ -200,7 +209,7 @@ func startServer() {
 	}
 	hs.workspacesChanged(currws.Workspace.Id - 1)
 
-	printJson(hs.workspaces)
+	hs.printJson()
 
 	conn := connect(gHyprlandSockPath)
 	defer conn.Close()
@@ -235,12 +244,6 @@ func main() {
 }
 
 // utils
-func hyprctl(args ...string) (err error) {
-	cmd := exec.Command("hyprctl", args...)
-	err = cmd.Run()
-	return err
-}
-
 func hyprqueryActiveWindow() (*clientJson, error) {
 	cmd := exec.Command("hyprctl", "-j", "activewindow")
 	stdout, err := cmd.StdoutPipe()
@@ -296,10 +299,12 @@ func connect(path string) net.Conn {
 	return conn
 }
 
-func printJson(arr []workspaceState) {
+func (hs *hyprState) printJson() {
+	hs.changed = false
+
 	var builder strings.Builder
-	builder.WriteString(fmt.Sprintf(`[{"index":%d, "state":%d}`, 0, arr[0]))
-	for i, state := range arr[1:] {
+	builder.WriteString(fmt.Sprintf(`[{"index":%d, "state":%d}`, 0, hs.workspaces[0]))
+	for i, state := range hs.workspaces[1:] {
 		builder.WriteString(fmt.Sprintf(`, {"index":%d, "state":%d}`, i+1, state))
 	}
 	builder.WriteRune(']')
