@@ -31,11 +31,11 @@
 
 (deflisten volumeIn
         :initial `100`
-        `scripts/volume-listener`)
+        `scripts/volume-listener 'source'  '@DEFAULT_SOURCE@'`)
 
-(deflisten volumeOut 
+(deflisten volumeOut
         :initial `100`
-        `scripts/volume-listener`)
+        `scripts/volume-listener 'sink' '@DEFAULT_SINK@'`)
 
 (deflisten wsState 
   :initial "[]"
@@ -78,7 +78,7 @@
          :flipped false
          :marks false
          :round-digits 0
-         :value { volumeOut < 0 ? -volumeOut : volumeOut}
+         :value { volumeIn < 0 ? -volumeIn : volumeIn}
          :min 0
          :max 100
          :onchange `pactl set-source-volume @DEFAULT_SOURCE@ {}%`
