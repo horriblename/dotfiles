@@ -35,7 +35,7 @@ export GTK_THEME=Breeze # Adwaita:dark
 # Enable colors and change prompt:
 autoload -U colors && colors
 
-setopt PUSHD_SILENT PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT PUSHD_IGNORE_DUPS PUSHD_TO_HOME
 
 # History in cache directory:
 HISTSIZE=1000
