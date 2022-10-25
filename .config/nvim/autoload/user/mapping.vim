@@ -23,7 +23,7 @@ fu! user#mapping#resetup()
 	noremap! <C-BS> <C-w>
 
 	tnoremap <M-C-N> <C-\><C-n>
-	tnoremap <M-C-V> <cmd>put<CR>
+	tnoremap <M-C-V> <cmd>put "<CR>
 
 	noremap H ^
 	noremap L g_
@@ -42,17 +42,28 @@ fu! user#mapping#resetup()
 	xmap S <Nop>
 	xnoremap S( "zs()<Esc>"zPgvlOlO<Esc>
 	xnoremap S) "zs()<Esc>"zPgvlOlO<Esc>
+	xnoremap Sb "zs()<Esc>"zPgvlOlO<Esc>
 	xnoremap S[ "zs[]<Esc>"zPgvlOlO<Esc>
 	xnoremap S] "zs[]<Esc>"zPgvlOlO<Esc>
 	xnoremap S{ "zs{}<Esc>"zPgvlOlO<Esc>
 	xnoremap S} "zs{}<Esc>"zPgvlOlO<Esc>
+	xnoremap SB "zs{}<Esc>"zPgvlOlO<Esc>
 	xnoremap S< "zs<><Esc>"zPgvlOlO<Esc>
 	xnoremap S> "zs<><Esc>"zPgvlOlO<Esc>
 	xnoremap S" "zs""<Esc>"zPgvlOlO<Esc>
 	xnoremap S' "zs''<Esc>"zPgvlOlO<Esc>
 	xnoremap S` "zs``<Esc>"zPgvlOlO<Esc>
 	xnoremap S* "zs**<Esc>"zPgvlOlO<Esc>
-	nnoremap daa "zd%:let @z=@z[1:-2]<cr>"zP
+	xnoremap S_ "zs__<Esc>"zPgvlOlO<Esc>
+	xnoremap Se "zs****<Left><Esc>"zPgvllOllO<Esc>
+	xnoremap SE "zs******<Left><Left><Esc>"zPgv3lO3lO<Esc>
+	" single line only, `gv` highlights whole thing including surrounding tag
+	xnoremap Su "zy:let @z='<u>'..@z..'</u>'<cr>gv"zP
+
+	" de-surround
+	for char in '(){}[]<>bBt"`' .. "'"
+		exec 'nnoremap ds' .. char ' di' ..char.. 'va' ..char.. 'p'
+	endfor
 
 	" keyboard layout switching
 	nnoremap <leader>y :set langmap=yYzZ\\"§&/()=?`ü+öä#-Ü*ÖÄ'\\;:_;zZyY@#^&*()_+[]\\;'\\\\/{}:\\"\\|\\<\\>?<cr>

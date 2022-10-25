@@ -30,11 +30,6 @@ fu! mux#setup()
 	tmap	<C-S-V> <C-\><C-N>pi
 	xmap	<C-S-C> y
 
-	hi normal guibg=000000
-	hi! TabLine ctermbg=000000 ctermfg=Grey guibg=000000 guifg=DarkGrey
-	hi! link TabLineFill TabLine
-	hi TabLineSel ctermfg=Yellow guifg=#fabd2f
-
 	set tabline=%!v:lua.require'mux.tabline'.tabline()
 
 	Term

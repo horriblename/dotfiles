@@ -13,9 +13,10 @@ endfu
 
 " call this function directly to re-setup
 fu! user#general#resetup()
-	" Basic settings
+	" General Options
 	" {{{
 	set mouse=a
+	set mousemodel=extend
 	syntax on
 	set ignorecase
 	set smartcase

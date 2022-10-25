@@ -1,6 +1,6 @@
 M = {}
 
-local TAB_MIN_WIDTH = 8
+local TAB_MIN_WIDTH = 12
 
 local fillLabel = function(title)
 	if #title >= TAB_MIN_WIDTH then
