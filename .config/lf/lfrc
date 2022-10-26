@@ -44,18 +44,14 @@ cmd new %{{
 	read ans
 	
 	# using zsh/csh style parameter substitution
-	dir=
-	file=$(echo $ans | sed 's|.*/||')
-
 	dir=$(echo $ans | grep -o '.*/')
 	file=${ans##*/}
 	focus=${ans%%/*}
 
-	#echo "DEBUG - cmd new: dir=$dir, file=$file" >> /tmp/lfrc-debug.log
 	[ -z $dir ] || mkdir -p "$dir"
 	[ -z $file ] || touch "$ans"
 
-	lf -remote "send $id select $focus"
+	lf -remote "send $id :select $focus; reload"
 }}
 
 cmd mkfile ${{
@@ -65,18 +61,18 @@ cmd mkfile ${{
 }}
 
 cmd chmod %{{
-   IFS=$'\n'
-   printf `stat -c "%a \033[32mMode Bits: \033[0m" "$f"`
+   printf '%s \033[32mMode Bits: \033[0m' $(stat -c '%a' "$f")
    read ans
 
+   IFS='
+'
    chmod "$ans" $fx
 
-   lf -remote 'send unselect'
-   lf -remote 'send reload'
+   lf -remote "send $id :unselect; reload"
 }}
 
 cmd sudomkfile %{{
-   printf "File Name: "
+   echo 'File Name: '
    read ans
    sudo $EDITOR $ans
 }}
@@ -154,11 +150,13 @@ cmd grep_string ${{
 cmd z_cd %{{
    printf 'z.lua: where to? '
    result="$(read input && ~/scripts/z.lua -e $input)"
-   [[ -z "$result" ]] && printf '\033[31mdirectory not found\033[0m' || lf -remote "send ${id} cd '${result}'"
+   [ -z "$result" ] && printf '\033[31mdirectory not found\033[0m' || lf -remote "send ${id} cd '${result}'"
 }}
 
 cmd dragon %{{
-   dragon-drop $@ "${fx[@]}"
+	IFS='
+'
+   dragon-drop $@ $fx
 }}
 
 cmd dragon-curl-target &{{
@@ -186,12 +184,14 @@ cmd unarchive ${{
 }}
 
 cmd zip $ {{
-   if [[ "$f" =~ "*.zip" ]]; then
-      z="$f"
-   else
-      z="$f.zip"
-   fi
+	case $f in
+		*.zip) z="$f";;
+		*)	    z="$f.zip";;
+	esac
    relPaths=$(echo "$fs" | sed "s|$PWD/||g")
+
+	IFS='
+'
    zip -r "$z" $relPaths
 }}
 cmd tar %tar cvf "$f.tar" "$f"
@@ -255,14 +255,18 @@ map ?
 cmap <backspace> cmd-delete-unix-word
 
 # File Openers
-map ee $$EDITOR "$f"
-map es $sudo -e "$f"
-map ed $IFS=$'\n' nvim -d $fx && lf -remote "send $id unselect"
+map ee $$EDITOR "$f" && lf -remote "send $id unselect"
+map es $sudo -e "$f" && lf -remote "send $id unselect"
+map ed ${{
+	IFS='
+' 
+	nvim -d $fx && lf -remote "send $id unselect"
+}}
 map I $view "$f"
 map o $(xdg-open "$f" 1>/dev/null 2>/dev/null & disown)
 map O open_with
-map cv $(code "$PWD")
-map cd &(LF_LEVEL=0 ${term:-konsole} -e "lf $PWD")
+map cv $(lvim "$PWD")
+map cd &(LF_LEVEL=0 ${term:-xterm} -e "lf $PWD")
 
 # Archive Mappings
 map Az zip
@@ -322,7 +326,7 @@ map U unselect
 map ex $$f
 map ?p grep_string "pdf"
 map ?? grep_string "txt"
-map du %du -h "$fx"
+map du %du -h "$f"
 map cl copy_location
 map zd calcdirsize
 map <a-h> set ratios 1:6
@@ -333,12 +337,12 @@ map <a-l> set ratios 1:2:3
 map - search
 
 # Movement
-map gtr cd ~/.local/share/Trash/files
 map gh cd ~
 map gd cd ~/Documents
 map gD cd ~/Downloads
 map gp cd ~/Pictures
 map gm cd ~/Music
+map gt cd ~/Templates
 map gs cd ~/scripts
 map gc cd ~/.config
 map gC cd ~/.cache
@@ -359,9 +363,6 @@ map gV cd /var
 map gbb cd /mnt/BUP
 map gbd cd /mnt/BUP/Documents_
 map gba cd /mnt/BUP/apps
-
-map gtt cd /mnt/ntdrive
-map gta cd /mnt/ntdrive/apps
 
 map gee cd /mnt/ext
 

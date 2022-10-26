@@ -173,19 +173,22 @@ func handleHyprEvents(conn net.Conn, hs *hyprState) {
 					log.Printf("Error converting event arg to int: %s", err)
 					hs.workspacesChanged(-1)
 				}
+			case "createworkspace", "destroyworkspace":
+				hs.workspacesChanged(-1)
+			case "openwindow", "closewindow", "movewindow":
+				hs.workspacesChanged(-1)
+
 			case "focusedmon":
 			case "activewindow":
 			case "fullscreen":
 			case "monitorremoved":
 			case "monitoradded":
-			case "createworkspace", "destroyworkspace":
-				hs.workspacesChanged(-1)
 			case "activelayout":
-			case "openwindow", "closewindow", "movewindow":
-				hs.workspacesChanged(-1)
+			case "openlayer":
+			case "closelayer":
 
 			default:
-				log.Printf("ERROR: got unrecognized event: %s", ev.name)
+				//log.Printf("WARN: got unrecognized event: %s", ev.name)
 
 			}
 		}

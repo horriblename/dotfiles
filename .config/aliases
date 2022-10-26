@@ -1,6 +1,18 @@
 #!/bin/sh
-alias dotfiles="git --git-dir='$XDG_CONFIG_HOME/dotfiles' --work-tree='$HOME'"
-alias lgdotfiles="lazygit --git-dir='$XDG_CONFIG_HOME/dotfiles' --work-tree='$HOME'"
+alias dotfiles="git --git-dir='${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles' --work-tree='$HOME'"
+alias lgdotfiles="lazygit --git-dir='${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles' --work-tree='$HOME'"
+
+dotfilesync() {
+	config="${XDG_CONFIG_HOME:-$HOME/.config}"
+	cmd="git '--git-dir=$config/dotfiles' '--work-tree=$HOME'"
+	if [ -f "$config/dotfiles" ]; then
+		$cmd fetch
+		$cmd --pathspec-from-file="$config/dotfilesync"
+	else
+		$cmd pull
+	fi
+}
+
 
 alias q=exit
 alias l="lsd"
