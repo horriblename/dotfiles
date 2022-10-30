@@ -37,7 +37,7 @@ fu! user#general#resetup()
 	set scrolloff=5
 	set cursorline
 	set lazyredraw
-	set cmdheight=2
+	set cmdheight=1
 	set noshowmode
 	set splitbelow splitright
 	set matchpairs+=<:>,*:*,`:`
@@ -48,8 +48,11 @@ fu! user#general#resetup()
 		au OptionSet expandtab if &expandtab | set listchars=tab:→\ ,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
 	augroup END
 
+	set wildcharm=<Tab>
 	set wildmode=longest,full
 	set wildmenu
+
+	set cmdwinheight=4
 
 	set path-=/usr/include
 	set path+=**
@@ -63,9 +66,6 @@ fu! user#general#resetup()
 
 	silent! nnoremap <leader>n :call SmartNewWin()<CR>
 
-	noremap <a-i> :<c-u>call <sid>GotoNextFloat(1)<cr>
-	noremap <a-o> :<c-u>call <sid>GotoNextFloat(0)<cr>
-
 	command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
 
 	" Save file as sudo when no sudo permissions
@@ -73,7 +73,7 @@ fu! user#general#resetup()
 	" CDC = Change to Directory of Current file
 	command CDC cd %:p:h
 
-	if has('nvim')
+	if has('nvim') && (!has('lua') || luaeval('not lvim'))
 		augroup TerminalTweaks
 			au!
 			au TermOpen * setlocal nolist nonumber norelativenumber statusline=%{b:term_title}
@@ -106,7 +106,7 @@ fu! SmartNewWin()
 endfu
 
 " focus the first floating window found
-fu! s:GotoFirstFloat() abort
+fu! user#general#GotoFirstFloat() abort
   for w in range(1, winnr('$'))
 	 let c = nvim_win_get_config(win_getid(w))
 	 if c.focusable && !empty(c.relative)
@@ -115,7 +115,7 @@ fu! s:GotoFirstFloat() abort
   endfor
 endfu
 
-fu! s:GotoNextFloat(reverse) abort
+fu! user#general#GotoNextFloat(reverse) abort
 	if !has("nvim")
 		return
 	endif
@@ -159,12 +159,9 @@ fu! Zlua(pattern)
 		return
 	endif
 	if &ft == "netrw"
-		execute "Explore" dir
-	elseif &ft == "NvimTree"
-		execute "cd ".dir
+		execute "Explore ".dir
 	else
 		execute "cd ".dir
-		echo dir
 	endif
 endfun
 

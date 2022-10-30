@@ -31,6 +31,8 @@ fu! user#mapping#resetup()
 	noremap gH g^
 
 	inoremap <C-l> <Right>
+	inoremap <C-j> <Down>
+	inoremap <C-k> <Up>
 	inoremap <C-h> <Left>
 
 	xnoremap ga gg0oG$
@@ -62,7 +64,7 @@ fu! user#mapping#resetup()
 
 	" de-surround
 	for char in '(){}[]<>bBt"`' .. "'"
-		exec 'nnoremap ds' .. char ' di' ..char.. 'va' ..char.. 'p'
+		exec 'nnoremap ds' .. char ' di' ..char.. 'va' ..char.. 'pgv'
 	endfor
 
 	" keyboard layout switching
@@ -130,8 +132,19 @@ fu! user#mapping#resetup()
 		exec 'tnoremap <M-' . i . '> <C-\><C-n>:' . i . 'tabnext<CR>'
 	endfor
 	noremap <M-9> :$tabnext<CR>
+
+	noremap <a-i> :<c-u>call user#general#GotoNextFloat(1)<cr>
+	noremap <a-o> :<c-u>call user#general#GotoNextFloat(0)<cr>
+
 	" }}}
 
+	" Cmd Win binding
+	augroup CmdWinMap
+		au!
+		au CmdwinEnter * nnoremap <buffer> <Esc> <cmd>:q<cr>
+	augroup END
+
+	" Plugins
 	nnoremap <silent> <leader>u :UndotreeToggle <bar> UndotreeFocus<CR>
 endfu
 

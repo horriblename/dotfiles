@@ -188,19 +188,37 @@ endfunction
 "  Create File/Directory
 "  --------------- "
 " TODO
-fu! netrw#custom#NewFileOrDir(path)
-	"let path=expand(a:path)
-	let diri=matchend(a:path,'.*/','')
-	if diri != -1
-		let dir=a:path[:diri-2]
-		let file=a:path[diri:]
+fu! s:inputHL(input)
+	return [[0, len(a:input), 'Directory']]
+endfu
+
+fu! netrw#custom#NewFileOrDir(islocal)
+	if !has('unix')
+		echoerr 'Only on Unix systems'
+		return
+	endif
+
+	let path = input({
+				\	'prompt': 'Create ' .. getcwd()->fnamemodify(':~:t') .. '/', 
+				\  'highlight': function('s:inputHL')
+				\})
+	if empty(path)
+		return
+	elseif path[len(path) - 1] == '/'
+		let dir=path
+		let file=''
 	else
-		let dir=''
-		let file=a:path
+		let dir = fnamemodify(path, ':h')
+		let file = fnamemodify(path, ':t')
 	endif
 
-	if dir != ''
-		call netrw#
+	if !empty(dir)
+		call system(['mkdir', '-p', dir])
 	endif
 
+	if !empty(file)
+		call system(['touch', path])
+	endif
+
+	return ['refresh']
 endfu

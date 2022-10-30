@@ -16,6 +16,7 @@ let g:Netrw_UserMaps = [
          \['J', 'netrw#custom#MarkFileDown'],
          \['i', 'netrw#custom#ListStyleVerbose'],
          \['s', 'netrw#custom#SortByVerbose'],
+			\['a', 'netrw#custom#NewFileOrDir'],
          \['y', 'netrw#custom#SetPasteOpAsCopy'],
          \['x', 'netrw#custom#SetPasteOpAsMove'],
          \['C', 'netrw#custom#ResetPasteOperation'],

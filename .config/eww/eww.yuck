@@ -15,6 +15,7 @@
 (defvar sep "|")
 
 (defvar snapCache "/home/py/.cache/hyprview")
+(defvar APP_ICON_DIR "/home/py/.local/share/icons/candy-icons/apps/scalable")
 
 
 ;; State Variable
@@ -22,24 +23,27 @@
 (defvar VolInScaleShow false)
 
 (defpoll datetime :interval "5s"
-      :initial `date +'{"time": "%H:%M", "date": "%d/%m" , "dayOfWeek": %w}'`
-      `date +'{"time": "%H:%M", "date": "%d/%m" , "dayOfWeek": %w}'`)
+  `date +'{"time": "%H:%M", "date": "%d/%m" , "dayOfWeek": %w}'`)
 
 (defpoll netStat :interval "100s"
-      :initial `scripts/check-network`
-      `scripts/check-network`)
+  ; :initial '{"type": "disconnected", "name": "checking..."}'
+  `scripts/check-network`)
 
 (deflisten volumeIn
-        :initial `100`
-        `scripts/volume-listener 'source'  '@DEFAULT_SOURCE@'`)
+  :initial `100`
+  `scripts/volume-listener 'source'  '@DEFAULT_SOURCE@'`)
 
 (deflisten volumeOut
-        :initial `100`
-        `scripts/volume-listener 'sink' '@DEFAULT_SINK@'`)
+  :initial `100`
+  `scripts/volume-listener 'sink' '@DEFAULT_SINK@'`)
 
 (deflisten wsState 
   :initial "[]"
   `scripts/hyprworkspaces`)
+
+(deflisten tasks
+  :initial "[]"
+  `scripts/taskbar`)
 
 ;; ---------------------
 ;; Widget definitions
@@ -54,27 +58,27 @@
 (defwidget _clock []
   (eventbox :class "clock"
             :onclick "${EWW_CMD} open calendar_win"
-       :tooltip "${dayOfWeek[datetime.dayOfWeek]}, ${datetime.date}"
-       (label :text {datetime.time})))
+            :tooltip "${dayOfWeek[datetime.dayOfWeek]}, ${datetime.date}"
+            (label :text {datetime.time})))
 
 (defwidget _network []
-			  ( box :class "sys-item net-box"
-					  (label :text {netIcons[netStat.type]} 
-								:tooltip {netStat.name})))
+  ( box :class "sys-item net-box"
+        (label :text {netIcons[netStat.type]} 
+               :tooltip {netStat.name})))
 
 (defwidget _volOutSlider []
-			  (scale :class "vol-out-bar"
-						:flipped true
-						:marks false
-						:round-digits 0
-						:value { volumeOut < 0 ? -volumeOut : volumeOut}
-						:min 0
-						:max 100
-						:onchange `pactl set-sink-volume @DEFAULT_SINK@ {}%`
-						:orientation 'h'))
+  (scale :class "vol-out-bar"
+         :flipped true
+         :marks false
+         :round-digits 0
+         :value { volumeOut < 0 ? -volumeOut : volumeOut}
+         :min 0
+         :max 100
+         :onchange `pactl set-sink-volume @DEFAULT_SINK@ {}%`
+         :orientation 'h'))
 
 (defwidget _volInSlider []
-        (scale :class "vol-in-bar"
+  (scale :class "vol-in-bar"
          :flipped false
          :marks false
          :round-digits 0
@@ -101,72 +105,81 @@
             volumeOut < 70 ? audioIcons[2] : audioIcons[3]}))
 
 (defwidget _audio []
-			  (eventbox :class "sys-item audio-box"
-							:onhover "${EWW_CMD} update VolInScaleShow=true" :onhoverlost "${EWW_CMD} update VolInScaleShow=false"
-							:onrightclick "pavucontrol"
-							(box :orientation 'h'
-								  :space-evenly false
-								  (_micIcon)
-								  (revealer :transition "slideleft"
-												:reveal VolInScaleShow
-												:duration "550ms"
-												(_volumeSliders))
-								  (_speakerIcon))))
+  (eventbox :class "sys-item audio-box"
+            :onhover "${EWW_CMD} update VolInScaleShow=true" :onhoverlost "${EWW_CMD} update VolInScaleShow=false"
+            :onrightclick "pavucontrol"
+            (box :orientation 'h'
+                 :space-evenly false
+                 (_micIcon)
+                 (revealer :transition "slideleft"
+                           :reveal VolInScaleShow
+                           :duration "550ms"
+                           (_volumeSliders))
+                 (_speakerIcon))))
 
 
 (defwidget _volumeSliders []
-			  (box :class "vol-bar-box" :orientation "v"
-					 (_volOutSlider)
-					 (_volInSlider)))
+  (box :class "vol-bar-box" :orientation "v"
+       (_volOutSlider)
+       (_volInSlider)))
 
 (defwidget _memUsage []
-        (box :class "sys-item ram-box" :vexpand "false" :hexpand "false" 
-         (circular-progress :value {EWW_RAM.used_mem_perc}
-          :class "mem-meter"
-          :start-at 25
-          :thickness 15
-          (button 
-           :class "icon-ram"
-           :tooltip "RAM ${round(EWW_RAM.used_mem_perc, 0)}%"
-           :onclick "notify-send test"
-           ""))))
+  (box :class "sys-item ram-box" :vexpand "false" :hexpand "false" 
+       (circular-progress :value {EWW_RAM.used_mem_perc}
+                          :class "mem-meter"
+                          :start-at 25
+                          :thickness 15
+                          (button 
+                            :class "icon-ram"
+                            :tooltip "RAM ${round(EWW_RAM.used_mem_perc, 0)}%"
+                            :onclick "notify-send test"
+                            ""))))
 
 (defwidget _cpuUsage []
-        (box :class "sys-item cpu-box"
-         (circular-progress :value {EWW_CPU.avg}
-          :class "cpu-meter"
-          :start-at 25
-          :thickness 15
-          (button 
-           :class "icon-cpu"
-           :tooltip "CPU ${round(EWW_CPU.avg, 2)}%" 
-           :onclick "notify-send test"
-           ""))))
+  (box :class "sys-item cpu-box"
+       (circular-progress :value {EWW_CPU.avg}
+                          :class "cpu-meter"
+                          :start-at 25
+                          :thickness 15
+                          (button 
+                            :class "icon-cpu"
+                            :tooltip "CPU ${round(EWW_CPU.avg, 2)}%" 
+                            :onclick "notify-send test"
+                            ""))))
 
 (defwidget workspace [ws]
-        (button :onclick "hyprctl dispatch workspace ${ws.index + 1}"
-         :visible { ws.state != 0 || ws.index < wsPersistent}
-         :class {
-                 ws.state == 0 ? "workspace ws-persistent" :
-                 ws.state == 1 ? "workspace" : "workspace ws-focused"}
-         { wsIcons[ws.index] ?: wsUnknownIcon}))
+  (button :onclick "hyprctl dispatch workspace ${ws.index + 1}"
+          :visible { ws.state != 0 || ws.index < wsPersistent}
+          :class {
+          ws.state == 0 ? "workspace ws-persistent" :
+          ws.state == 1 ? "workspace" : "workspace ws-focused"}
+          { wsIcons[ws.index] ?: wsUnknownIcon}))
 
 (defwidget workspaces []
   (eventbox :class "workspaces"
-            :orientation "h"
             :halign "start"
-            :spacing 10
             :onscroll "hyprctl dispatch workspace $([ {} = up ] && echo -1 || echo +1)"
             (box
               (for ws in wsState
                    (workspace :ws ws)))))
 
+(defwidget _taskbar []
+  (box :class 'taskbar'
+       (for app in tasks
+            (button :class 'task-btn'
+                    :onclick 'notify-send ${tasks.pid}'
+                    (image :class 'task-icon'
+                           :path "${APP_ICON_DIR}/foot.svg"
+                           :image-width 18)))))
+
 (defwidget barleft []
-        (box :orientation "h"
-         :space-evenly false
-         :halign "start"
-         :spacing 1
-         (workspaces)))
+  (box :orientation "h"
+       :space-evenly false
+       :halign "start"
+       :spacing 1
+       (workspaces)
+       ; (_taskbar)
+       ))
 
 (defwidget system []
   (box :orientation "h"
@@ -200,54 +213,54 @@
   (_calendar_applet))
 
 (defwindow bar
-        :monitor 0
-        :exclusive false
-        :geometry (geometry
-                   :width "100%"
-                   :height "30px"
-                   :x "0"
-                   :y "0")
-        :stacking "fg"
-        :windowtype "dock"
-        (centerbox :class "bar"
-         :hexpand true
-         :orientation "h"
-         (barleft)
-         (_clock)
-         (trays)))
+  :monitor 0
+  :exclusive false
+  :geometry (geometry
+              :width "100%"
+              :height "30px"
+              :x "0"
+              :y "0")
+  :stacking "fg"
+  :windowtype "dock"
+  (centerbox :class "bar"
+             :hexpand true
+             :orientation "h"
+             (barleft)
+             (_clock)
+             (trays)))
 
 
 (defwindow overview
-        :stacking "fg"
-        :focusable false 
-        :monitor 0
-        :geometry (geometry
-                      :width "75%"
-                      :height "50%"
-                      :anchor "center")
-        (box :class "overview"
-         :spacing 5
-         :orientation "v"
-         :space-evenly: true
-         (box :class "overview-row"
-          :spacing 5
-          :orientation "h"
-          :space-evenly true
-          (for i in "[1, 2, 3]"
-              (button :class "snap-box"
-                :onclick  "hyprctl dispatch workspace ${i} && ${EWW_CMD} close overview"
-                (image :path "${snapCache}/ws-${i}.png"
-                 :image-width {1920 * 0.25}
-                 :image-height {1080 / 4}))))
-         (box :class "overview-row"
-          :spacing 5
-          :orientation "h"
-          :space-evenly true
-          (for i in "[4, 5, 6]"
-              (button :class "snap-box"
-                :onclick  "hyprctl dispatch workspace ${i} && ${EWW_CMD} close overview"
-                (image :path "${snapCache}/ws-${i}.png"
-                 :image-width {1920 * 0.25}
-                 :image-height {1080 / 4}))))))
+  :stacking "fg"
+  :focusable false 
+  :monitor 0
+  :geometry (geometry
+              :width "75%"
+              :height "50%"
+              :anchor "center")
+  (box :class "overview"
+       :spacing 5
+       :orientation "v"
+       :space-evenly: true
+       (box :class "overview-row"
+            :spacing 5
+            :orientation "h"
+            :space-evenly true
+            (for i in "[1, 2, 3]"
+                 (button :class "snap-box"
+                         :onclick  "hyprctl dispatch workspace ${i} && ${EWW_CMD} close overview"
+                         (image :path "${snapCache}/ws-${i}.png"
+                                :image-width {1920 * 0.25}
+                                :image-height {1080 / 4}))))
+       (box :class "overview-row"
+            :spacing 5
+            :orientation "h"
+            :space-evenly true
+            (for i in "[4, 5, 6]"
+                 (button :class "snap-box"
+                         :onclick  "hyprctl dispatch workspace ${i} && ${EWW_CMD} close overview"
+                         (image :path "${snapCache}/ws-${i}.png"
+                                :image-width {1920 * 0.25}
+                                :image-height {1080 / 4}))))))
 
 ;; vim: ft=yuck : syn=scheme

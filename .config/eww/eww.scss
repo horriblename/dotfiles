@@ -89,6 +89,14 @@ scale trough {
 	border-bottom: 2px solid $orange;
 }
 
+.taskbar {
+	background-color: $bg_h;
+}
+
+.task-btn {
+	padding: 0px 5px;
+}
+
 /* Bar - center */
 .clock {
 	font-weight: bold;
