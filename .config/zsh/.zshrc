@@ -159,7 +159,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 #source /usr/share/doc/pkgfile/command-not-found.zsh 2>/dev/null
 
 _ZL_CD=pushd
-eval "$(lua ~/scripts/z.lua --init zsh enhanced)"
+eval "$(lua ~/.local/bin/z.lua --init zsh enhanced)"
 
 # Set title to 'zsh'
 _title_precmd(){ echo -ne '\e]0;zsh\007' }

@@ -1,6 +1,6 @@
 M = {}
 
-local profiles = { 'modern', 'xterm' }
+local profiles = { 'modern', 'xterm', 'konsole' }
 
 M.calibrate = function(profile)
 	if profile == nil then
@@ -26,6 +26,8 @@ M.calibrate = function(profile)
 
 	if profile == 'xterm' then
 		vim.keymap.set({ 'i', 'c' }, '<BS>', '<c-w>', { noremap = true })
+	elseif profile == 'konsole' then
+		vim.keymap.set({ 'i', 'c' }, '<C-h>', '<C-w>', { noremap = true })
 	else
 		vim.keymap.set('i', '<C-H>', '<Left>', { noremap = true })
 		vim.keymap.set('i', '<C-BS>', '<C-W>', { noremap = true })

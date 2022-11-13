@@ -17,7 +17,6 @@ set mouse on
 
 cmd on-cd $ printf '\033]0;%s\007' "${PWD##*/}/" 
 
-map sudo $(sudo lf -config="$HOME/.config/lf/lfrc" -command 'set drawbox true')
 
 # Custom Functions {{
 cmd open ${{
@@ -49,7 +48,7 @@ cmd new %{{
 	read ans
 	
 	# using zsh/csh style parameter substitution
-	dir=$(dirname "$ans")
+	dir="$(echo "$ans" | grep -o '.*/')"
 	file=${ans##*/}
 	focus=${ans%%/*}
 
@@ -154,7 +153,7 @@ cmd grep_string ${{
 
 cmd z_cd %{{
    printf 'z.lua: where to? '
-   result="$(read input && ~/scripts/z.lua -e $input)"
+   result="$(read input && z.lua -e $input)"
    [ -z "$result" ] && printf '\033[31mdirectory not found\033[0m' || lf -remote "send ${id} cd '${result}'"
 }}
 
@@ -262,6 +261,9 @@ cmap <backspace> cmd-delete-unix-word
 # }}
 
 # File Openers {{
+map sudo $ {{
+	sudo env EDITOR=nvim lf -config="$HOME/.config/lf/lfrc" -command 'set drawbox true'
+}}
 map ee $$EDITOR "$f" && lf -remote "send $id unselect"
 map es $sudo -e "$f" && lf -remote "send $id unselect"
 map ed ${{
@@ -292,7 +294,7 @@ map tr restore_trash
 
 # Broot Mapping {{
 map f fzf_jump
-map F broot_jump
+map F filter
 #map ss stripspace
 # }}
 

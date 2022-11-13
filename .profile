@@ -47,6 +47,6 @@ export WINEPREFIX="${XDG_DATA_HOME}/wine"
 #export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=${XDG_CONFIG_HOME}/java"
 export _ZL_DATA="$XDG_DATA_HOME/zlua"
 
-export PATH="$HOME/.local/bin:$GOPATH/bin:$CARGO_HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$GOPATH/bin:$CARGO_HOME/bin:$XDG_DATA_HOME/npm/bin:$PATH"
 
 [ -f "$XDG_CONFIG_HOME/aliases" ] && source "$XDG_CONFIG_HOME/aliases"

@@ -7,7 +7,6 @@ let mapleader=" "
 
 " call this function directly to re-setup
 fu! user#mapping#resetup()
-	" Fixing unintuitive keybind behaviour
 	" Editor mappings {{{
 	xnoremap > >gv
 	xnoremap < <gv
@@ -70,18 +69,15 @@ fu! user#mapping#resetup()
 	" keyboard layout switching
 	nnoremap <leader>y :set langmap=yYzZ\\"§&/()=?`ü+öä#-Ü*ÖÄ'\\;:_;zZyY@#^&*()_+[]\\;'\\\\/{}:\\"\\|\\<\\>?<cr>
 	nnoremap <leader>z :set langmap=<cr>
-	" }}}
-
-	" Window Management {{{
-	silent! nnoremap <leader>h :split<CR>
-	silent! nnoremap <leader>v :vsplit<CR>
 
 	silent! nnoremap <unique> <leader>e :25Lexplore<CR>
 	silent! nnoremap <unique> <leader>f :find 
-
+	" }}}
+	" Window Management {{{
 	nnoremap <leader>q :q<CR>
 	nnoremap <leader>Q :q!
 	nnoremap <leader>c :bwipeout<CR>
+	nnoremap <leader>C :bwipeout!<CR>
 	nnoremap <M-c> :bdelete<CR>
 	inoremap <M-c> <Esc>:bdelete<CR>
 	nnoremap <M-c> <C-\><C-N>:bdelete<CR>

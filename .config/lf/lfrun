@@ -8,6 +8,6 @@ set -e
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 	lf "$@"
 else
-	#~/.local/share/go/bin/lf "$@" 3>&-
-	~/repo/lf/lf -log "/tmp/lf-$$.log" "$@" 2> >(tee -a "/tmp/lf-$$-stderr.log" >&2)
+	mkdir -p /tmp/lf
+	lf -log "/tmp/lf/$$.log" "$@" 2> >(tee -a "/tmp/lf/$$-stderr.log" >&2)
 fi

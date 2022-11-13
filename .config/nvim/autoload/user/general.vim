@@ -45,7 +45,7 @@ fu! user#general#resetup()
 
 	augroup SetListChars
 		au!
-		au OptionSet expandtab if &expandtab | set listchars=tab:→\ ,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
+		au OptionSet expandtab if &expandtab | set listchars=tab:\ \ →,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
 	augroup END
 
 	set wildcharm=<Tab>
@@ -129,7 +129,7 @@ fu! user#general#GotoNextFloat(reverse) abort
 	if loop_from != 1
 		let loop += range(1, loop_from-2)
 	endif
-	if a:reverse == 1
+	if a:reverse
 		let loop = reverse(loop)
 	endif
 
@@ -144,18 +144,13 @@ fu! user#general#GotoNextFloat(reverse) abort
 endfunction
 
 fu! Zlua(pattern)
-	let zlua='~/scripts/z.lua'
+	let zlua='z.lua'
 	if ! empty($ZLUA_SCRIPT)
 		let zlua=$ZLUA_SCRIPT
 	endif
-	let zlua=expand(zlua)
-	if !filereadable(zlua)
-		echoerr '~/scripts/z.lua not found'
-		return
-	endif
-	let dir=system(zlua.' -e '.a:pattern)
+	let dir=system([zlua, '-e', a:pattern])
 	if strlen(dir) == 0
-		echo 'directory not found'
+		echoerr 'z.lua: directory not found'
 		return
 	endif
 	if &ft == "netrw"
@@ -166,19 +161,12 @@ fu! Zlua(pattern)
 endfun
 
 fu! ZluaComp(ArgLead, CmdLine, CursorPos)
-	let zlua='~/scripts/z.lua'
+	let zlua='z.lua'
 	if ! empty($ZLUA_SCRIPT)
 		let zlua=$ZLUA_SCRIPT
 	endif
-	let zlua=expand(zlua)
-	if !filereadable(zlua)
-		echoerr 'z.lua script not found'
-		return
-	endif
 
-	return systemlist(zlua.' --complete '.a:ArgLead)
-	let l=reverse(systemlist(zlua.' --complete '.a:ArgLead))
-	return map(l, {_, val -> substitute(val, "^[^/]*", "", "")})
+	return systemlist([zlua, '--complete', a:ArgLead])
 endfun
 " }}}
 

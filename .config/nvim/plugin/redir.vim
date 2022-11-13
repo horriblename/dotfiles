@@ -28,9 +28,6 @@ function! Redir(cmd, rng, start, end)
 		let output = split(output,"\n")
 	endif
    
-   if len(output) <= &cmdheight
-      return
-   endif
 	botright new
 	let w:scratch = 1
 	setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
