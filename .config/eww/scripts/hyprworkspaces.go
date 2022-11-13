@@ -92,6 +92,16 @@ type clientJson struct {
 	// Pid      int    `json:"pid"`
 }
 
+type monitorJson struct {
+	Id int `json:"id"`
+	// Name string `json:"name"`
+	// Desc string `json:"description"`
+	ActiveWorspace struct {
+		Id   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"activeWorkspace"`
+}
+
 // (*hyprState).workspacesChanged should be called whenever the workspaceState is
 // changed
 //
@@ -204,13 +214,14 @@ func startServer() {
 		workspaces: make([]workspaceState, PERSISTENT_WORKSPACES),
 	}
 
-	currws, err := hyprqueryActiveWindow()
+	monitors, err := hyprqueryMonitors()
 	if err != nil {
-		log.Printf("Error getting active window: %s", err)
-	} else if currws.Workspace.Id < 1 {
-		currws.Workspace.Id = 1
+		log.Printf("Error getting monitor info: %s", err)
+	} else if len(monitors) == 0 {
+		log.Printf("Error hyprctl returned zero monitors: %s", err)
 	}
-	hs.workspacesChanged(currws.Workspace.Id - 1)
+
+	hs.workspacesChanged(monitors[0].ActiveWorspace.Id - 1)
 
 	hs.printJson()
 
@@ -247,8 +258,8 @@ func main() {
 }
 
 // utils
-func hyprqueryActiveWindow() (*clientJson, error) {
-	cmd := exec.Command("hyprctl", "-j", "activewindow")
+func hyprqueryMonitors() ([]monitorJson, error) {
+	cmd := exec.Command("hyprctl", "-j", "monitors")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return nil, err
@@ -257,9 +268,9 @@ func hyprqueryActiveWindow() (*clientJson, error) {
 		return nil, err
 	}
 
-	client := &clientJson{}
+	monitors := make([]monitorJson, 0)
 
-	if err := json.NewDecoder(stdout).Decode(&client); err != nil {
+	if err := json.NewDecoder(stdout).Decode(&monitors); err != nil {
 		return nil, err
 	}
 
@@ -267,7 +278,7 @@ func hyprqueryActiveWindow() (*clientJson, error) {
 		return nil, err
 	}
 
-	return client, err
+	return monitors, err
 }
 
 func hyprqueryWorkspaces() (res []workspaceJson, err error) {
