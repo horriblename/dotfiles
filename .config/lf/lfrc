@@ -118,6 +118,13 @@ cmd mkln ${{
 	esac
 }}
 
+cmd follow_ln %{{
+	path="$(stat -c '%N' "$f" | sed -E "s/.*-> '(.*)'/\1/" )"
+	echo "$path"
+
+	[ -n $path ] && lf -remote "send $id select $path"
+}}
+
 cmd fzf_jump ${{
    res=$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')
    if [ -f "$res" ]; then
@@ -264,8 +271,9 @@ cmap <backspace> cmd-delete-unix-word
 map sudo $ {{
 	sudo env EDITOR=nvim lf -config="$HOME/.config/lf/lfrc" -command 'set drawbox true'
 }}
-map ee $$EDITOR "$f" && lf -remote "send $id unselect"
-map es $sudo -e "$f" && lf -remote "send $id unselect"
+map ee $$EDITOR "$f"
+map es $sudo -e "$f"
+map ei $nvide -- "$f"
 map ed ${{
 	IFS='
 ' 
@@ -303,9 +311,6 @@ map dr dragon --all --and-exit
 map ds dragon --all
 map di dragon
 map dt dragon-curl-target --and-exit
-map dm mvdragon
-map dc cpdragon
-map dl dlfile
 map <m-2> dragon --all --and-exit
 # }}
 
@@ -370,6 +375,7 @@ map gr cd ~/repo
 map gl cd ~/.local
 
 map Z z_cd
+map gf follow_ln
 map g/ cd /
 map gE cd /etc
 map gUU cd /usr

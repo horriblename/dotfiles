@@ -72,6 +72,9 @@ fu! user#mapping#resetup()
 
 	silent! nnoremap <unique> <leader>e :25Lexplore<CR>
 	silent! nnoremap <unique> <leader>f :find 
+
+	nnoremap <leader>n :cnext<CR>
+	nnoremap <leader>N :cprev<CR>
 	" }}}
 	" Window Management {{{
 	nnoremap <leader>q :q<CR>

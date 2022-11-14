@@ -1,5 +1,7 @@
 call user#mapping#setup()
 call user#general#setup()
+" may not exist
+silent! call user#local#setup()
 
 if !empty($NVIM)
 	call mux#subshell#setup()

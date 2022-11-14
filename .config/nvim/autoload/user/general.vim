@@ -64,8 +64,6 @@ fu! user#general#resetup()
 	endif
 	" }}}
 
-	silent! nnoremap <leader>n :call SmartNewWin()<CR>
-
 	command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
 
 	" Save file as sudo when no sudo permissions
@@ -92,19 +90,6 @@ fu! user#general#resetup()
 endfu
 
 " function definitions {{{
-fu! SmartNewWin()
-	let l:whratio=4
-	let l:wininfo=getwininfo(win_getid())[0]
-	let l:h=get(l:wininfo,"height",0)
-	let l:w=get(l:wininfo,"width",0)
-	echo l:w l:h
-	if l:w >= l:whratio * l:h
-		vnew
-	else
-		new
-	endif
-endfu
-
 " focus the first floating window found
 fu! user#general#GotoFirstFloat() abort
   for w in range(1, winnr('$'))
