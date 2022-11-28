@@ -11,11 +11,6 @@ fu! user#mapping#resetup()
 	xnoremap > >gv
 	xnoremap < <gv
 
-	nmap <C-W>>  <C-W>><C-W>
-	nmap <C-W><  <C-W><<C-W>
-	nmap <C-W>+  <C-W>+<C-W>
-	nmap <C-W>-  <C-W>-<C-W>
-
 	vnoremap <Tab>    >gv
 	vnoremap <S-Tab>  <gv
 
@@ -37,6 +32,20 @@ fu! user#mapping#resetup()
 	xnoremap ga gg0oG$
 
 	xnoremap X "_x
+	vnoremap <C-n> :m '>+1<CR>gv-gv
+	vnoremap <C-p> :m '<-2<CR>gv-gv
+
+	" Autoclose
+	inoremap <expr> " user#autoclose#InsertSymmetric('"')
+	inoremap <expr> ' user#autoclose#InsertSymmetric("'")
+	inoremap <expr> ` user#autoclose#InsertSymmetric('`')
+	inoremap ( ()<left>
+	inoremap [ []<left>
+	inoremap { {}<left>
+	inoremap {<CR> {<CR>}<ESC>O
+	inoremap <expr> ) user#autoclose#CloseRight(")")
+	inoremap <expr> ] user#autoclose#CloseRight("]")
+	inoremap <expr> } user#autoclose#CloseRight("}")
 
 	nnoremap S :%s##gI<Left><Left><Left>
 	" surround with parenthesis. Using register "z to not interfere with clipboard
@@ -58,12 +67,13 @@ fu! user#mapping#resetup()
 	xnoremap S_ "zs__<Esc>"zPgvlOlO<Esc>
 	xnoremap Se "zs****<Left><Esc>"zPgvllOllO<Esc>
 	xnoremap SE "zs******<Left><Left><Esc>"zPgv3lO3lO<Esc>
+	xnoremap S<space> "zs<space><space><Esc>"zPgvlOlO<Esc>
 	" single line only, `gv` highlights whole thing including surrounding tag
 	xnoremap Su "zy:let @z='<u>'..@z..'</u>'<cr>gv"zP
 
 	" de-surround
-	for char in '(){}[]<>bBt"`' .. "'"
-		exec 'nnoremap ds' .. char ' di' ..char.. 'va' ..char.. 'pgv'
+	for char in '(){}[]<>bBt"`' . "'"
+		exec 'nnoremap ds'.char ' di'.char.'va'.char.'pgv'
 	endfor
 
 	" keyboard layout switching
@@ -73,8 +83,15 @@ fu! user#mapping#resetup()
 	silent! nnoremap <unique> <leader>e :25Lexplore<CR>
 	silent! nnoremap <unique> <leader>f :find 
 
-	nnoremap <leader>n :cnext<CR>
-	nnoremap <leader>N :cprev<CR>
+	" quickfix
+	nnoremap <C-'><C-n> :cnext<CR>
+	nnoremap <C-'><C-p> :cprev<CR>
+	nnoremap <C-'><C-'> :copen<CR>
+
+	" toggleterm
+	noremap <M-x> :call user#general#ToggleTerm()<cr>
+	inoremap <M-x> <Esc>:call user#general#ToggleTerm()<cr>
+	tnoremap <M-x> <Cmd>:call user#general#ToggleTerm()<cr>
 	" }}}
 	" Window Management {{{
 	nnoremap <leader>q :q<CR>
@@ -85,6 +102,19 @@ fu! user#mapping#resetup()
 	inoremap <M-c> <Esc>:bdelete<CR>
 	nnoremap <M-c> <C-\><C-N>:bdelete<CR>
 	nnoremap <C-s> :w<CR>
+
+	nnoremap <M-C-.>  <C-W>3>
+	nnoremap <M-C-,>  <C-W>3<
+	nnoremap <M-C-=>  <C-W>3+
+	nnoremap <M-C-->  <C-W>3-
+	inoremap <M-C-.>  <Esc><C-W>>3i
+	inoremap <M-C-,>  <Esc><C-W><3i
+	inoremap <M-C-=>  <Cmd>resize 3+<CR>
+	inoremap <M-C-->  <Cmd>resize 3-<CR>
+	tnoremap <M-C-.>  <C-\><C-n><C-W>3>
+	tnoremap <M-C-,>  <C-\><C-n><C-W>3<
+	tnoremap <M-C-=>  <C-\><C-n><C-W>3+
+	tnoremap <M-C-->  <C-\><C-n><C-W>3-
 
 	nnoremap <leader>r :n#<CR>
 
@@ -132,8 +162,8 @@ fu! user#mapping#resetup()
 	endfor
 	noremap <M-9> :$tabnext<CR>
 
-	noremap <a-i> :<c-u>call user#general#GotoNextFloat(1)<cr>
-	noremap <a-o> :<c-u>call user#general#GotoNextFloat(0)<cr>
+	noremap <M-i> :<c-u>call user#general#GotoNextFloat(1)<cr>
+	noremap <M-o> :<c-u>call user#general#GotoNextFloat(0)<cr>
 
 	" }}}
 

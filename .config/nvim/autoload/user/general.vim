@@ -24,6 +24,7 @@ fu! user#general#resetup()
 	set encoding=utf-8
 	set autoindent
 	set linebreak
+	set spelllang=en,de
 
 	" Tab Settings
 	set noexpandtab
@@ -45,7 +46,7 @@ fu! user#general#resetup()
 
 	augroup SetListChars
 		au!
-		au OptionSet expandtab if &expandtab | set listchars=tab:\ \ →,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
+		au OptionSet expandtab if &expandtab | setl listchars=tab:\ \ →,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
 	augroup END
 
 	set wildcharm=<Tab>
@@ -153,6 +154,37 @@ fu! ZluaComp(ArgLead, CmdLine, CursorPos)
 
 	return systemlist([zlua, '--complete', a:ArgLead])
 endfun
+
+if has('nvim')
+	fu! user#general#ToggleTerm()
+		let buf=bufnr('^term://*#toggleterm#')
+		" buffer doesn't exist
+		if buf == -1
+			let h=min([&lines/2, 15])
+			exec 'botright ' . h .'new'
+			" this probably won't work with non posix-like shells
+			exec 'e term://' . &shell . ';\#toggleterm\#'
+			return
+		endif
+
+		let win=bufwinnr(buf)
+
+		" window exists
+		if win != -1
+			exec 'close ' . win
+			return
+		endif
+
+		" buf exists but window does not
+		let h=min([&lines/2, 15])
+		exec 'botright ' . h .'new'
+		exec 'buf ' . buf
+	endfu
+else " TODO vim version
+	fu! user#general#ToggleTerm()
+		term
+	endfu
+endif
 " }}}
 
 call user#general#resetup()

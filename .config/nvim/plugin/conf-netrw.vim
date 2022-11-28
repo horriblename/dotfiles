@@ -28,7 +28,7 @@ let g:Netrw_UserMaps = [
          \['P', 'netrw#custom#TogglePreviewMode'],
 		\] " relevant functions are decalred below
 
-hi! link netrwMarkFile WildMenu
+hi! link netrwMarkFile PmenuSel
 hi! netrwCopyMark  guibg=Yellow guifg=black
 hi! netrwMoveMark  guibg=Red guifg=black
 

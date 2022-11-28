@@ -37,7 +37,7 @@ cmd mkdir %{{
    mkdir "$ans" && echo "directory $ans created"
 }}
 
-cmd shareViaNullPointer ${{
+cmd shareViaNullPointer %{{
    dest=$(curl -F"file=@$f" https://0x0.st)
    [ ! -z "$WAYLAND_DISPLAY" ] && wl-copy "$dest" || echo "$dest" | xclip -selection clipboard
    echo $dest
@@ -282,8 +282,8 @@ map ed ${{
 map I $view "$f"
 map o $(xdg-open "$f" 1>/dev/null 2>/dev/null & disown)
 map O open_with
-map cv $(lvim "$PWD")
-map cd &(LF_LEVEL=0 ${term:-xterm} -e "lf $PWD")
+map cv $gnvide
+map cd &LF_LEVEL=0 ${term:-xterm} -e "lf $PWD"
 # }}
 
 # Archive Mappings {{

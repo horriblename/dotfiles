@@ -177,26 +177,12 @@ typeset -ga preexec_functions
 	preexec_functions[$(($#preexec_functions+1))]=_title_preexec
 }
 
-if [ ! -z ${NVIM:+x} -a -z "x" ]; then
-	_nvimmux_precmd() {
-		#nvim --server "$NVIM" --remote-expr "mux#setTitle('$$',&shell)" > /dev/null
-	}
-
-	typeset -ga precmd_functions
-	[ -n "${precmd_functions[(r)_nvimmux_precmd]}" ] || {
-		precmd_functions[$(($#precmd_functions+1))]=_nvimmux_precmd
-	}
-
-	_nvimmux_preexec() {
-		#cmd=$(echo $1 | sed "s/'/\\'/g")
-		cmd="$1"
-		nvim --server "$NVIM" --remote-expr "mux#setTitle('$$','$cmd')" | cat
-	}
-
-	typeset -ga preexec_functions
-	[ -n "${preexec_functions[(r)_nvimmux_preexec]}" ] || {
-		preexec_functions[$(($#preexec_functions+1))]=_nvimmux_preexec
-	}
+# nvim nested session
+if [ -n ${NVIM} ]; then
+  # nvim_remote() {
+  #   nvim "+lua require('mux.nested').remote_wait()" "$@"
+  # }
+  # EDITOR=nvim_remote
 fi
 
 # Power level 10k prompt

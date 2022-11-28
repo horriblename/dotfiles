@@ -5,7 +5,7 @@
 ;; Constants
 
 ;; (defvar WM "hyprland")
-(defvar wsIcons `["","","","","","","",""]`)
+(defvar wsIcons `["","","","","﨧", "", "", "","",""]`)
 (defvar wsUnknownIcon "")
 (defvar wsPersistent 6)
 (defvar audioIcons `["婢", "奄", "奔", "墳"]`)

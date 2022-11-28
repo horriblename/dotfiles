@@ -7,12 +7,13 @@ if !empty($NVIM)
 	call mux#subshell#setup()
 endif
 
-try
-    colorscheme badwolf
-catch /^Vim\%((\a\+)\)\=:E185/
-endtry
-
 augroup ColorTweaks
 	au!
 	au  ColorScheme badwolf hi! Comment guifg=#aaa6a1
+	au  ColorScheme gruvbox hi! Comment guifg=#a5998d
 augroup END
+
+try
+    colorscheme gruvbox
+catch /^Vim\%((\a\+)\)\=:E185/
+endtry

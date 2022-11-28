@@ -249,8 +249,7 @@ bar {
 #exec swhks&
 exec foot --server
 exec sleep 1 && \
-     footclient --no-wait --app-id foot-quake nvim +"call mux#setup()" && \
-     footclient --no-wait --app-id sticky-scratch nvim +'set ch=1 nonu nornu' ~/Documents/stack/scratch.md
+     footclient --no-wait --app-id foot-quake nvim +"call mux#setup()"
 #exec ibus-daemon -drR
 exec nextcloud --background
 exec krunner -d

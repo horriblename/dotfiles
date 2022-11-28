@@ -47,7 +47,7 @@ M.tabline = function(debug)
 	local s = ''
 	for i = 1, vim.fn.tabpagenr('$') do
 		if i == vim.fn.tabpagenr() then
-			s = s .. '%#TabLineSel# %#StatusLineNC# '
+			s = s .. '%#TabLineSel#▌ '
 		else
 			s = s .. '%#TabLine#| '
 		end
@@ -57,7 +57,7 @@ M.tabline = function(debug)
 		s = s .. tabLabel(i, debug) .. ' '
 	end
 
-	s = s .. '%#TabLineFill#%T'
+	s = s .. '%#TabLineFill#|%T'
 	s = s .. '%=%#TabLine#%999XX'
 	return s
 end
