@@ -194,16 +194,34 @@ cmd unarchive ${{
    esac
 }}
 
-cmd zip $ {{
-	case $f in
-		*.zip) z="$f";;
-		*)	    z="$f.zip";;
-	esac
-   relPaths=$(echo "$fs" | sed "s|$PWD/||g")
+cmd zip ${{
+	zipfile="${f%.zip}.zip"
+	printf 'give archive name (default \033[32m%s\033[0m): ' "$(basename "$zipfile")"
+	read ans
+	ans="$(tr -d '\000-\011\013\014\016-\037' <<< "$ans")"
+	[ -n "$ans" ] && zipfile="$ans"
+	echo $zipfile
 
-	IFS='
+   load=$(cat ~/.local/share/lf/files)
+   mode=$(echo "$load" | sed -n '1p')
+   rel_targets=$(echo "$load" | sed '1d' | sed "s|$PWD/||g")
+
+	if [ -z "$rel_targets" ]; then
+		lf -remote "send $id echo no files selected! use copy/cut to select files."
+	fi
+
+	(
+		IFS='
 '
-   zip -r "$z" $relPaths
+		if zip -r "$zipfile" $rel_targets; then
+			[ "$mode" = move ] && rm -r $rel_targets
+		else
+			lf -remote "send $id echo $(printf '\033[31mzip failed!\033[0m')"
+		fi
+	)
+
+	action="${mode//y/ie}d" # => 'moved' or 'copied'
+   lf -remote "send $id :echo $action $(echo "$rel_targets" | wc -l) files into $zipfile; clear"
 }}
 cmd tar %tar cvf "$f.tar" "$f"
 cmd targz %tar cvzf "$f.tar.gz" "$f"

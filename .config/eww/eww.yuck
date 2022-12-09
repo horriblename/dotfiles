@@ -216,11 +216,11 @@
   :monitor 0
   :exclusive false
   :geometry (geometry
+				  :anchor "top center"
               :width "100%"
-              :height "30px"
-              :x "0"
-              :y "0")
+              :height "30px")
   :stacking "fg"
+  :exclusive true
   :windowtype "dock"
   (centerbox :class "bar"
              :hexpand true

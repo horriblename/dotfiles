@@ -28,9 +28,9 @@ fu! user#general#resetup()
 
 	" Tab Settings
 	set noexpandtab
-	set shiftwidth=3
-	set softtabstop=3
 	set tabstop=3
+	set shiftwidth=0   " 0 = follow tabstop
+	"set softtabstop=3
 
 	" Appearance
 	set number relativenumber
@@ -47,6 +47,7 @@ fu! user#general#resetup()
 	augroup SetListChars
 		au!
 		au OptionSet expandtab if &expandtab | setl listchars=tab:\ \ →,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
+		au BufNew * if &expandtab | setl listchars=tab:\ \ →,trail:· | else | set listchars=tab:\ \ ,lead:·,trail:· | endif
 	augroup END
 
 	set wildcharm=<Tab>
@@ -68,9 +69,11 @@ fu! user#general#resetup()
 	command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
 
 	" Save file as sudo when no sudo permissions
-	command Sudowrite execute 'write ! sudo tee %' <bar> edit!
+	command! Sudowrite execute 'write ! sudo tee %' <bar> edit!
 	" CDC = Change to Directory of Current file
-	command CDC cd %:p:h
+	command! CDC cd %:p:h
+	" delete augroup
+	command! -nargs=1 AugroupDel call user#general#AugroupDel(<q-args>)
 
 	if has('nvim') && (!has('lua') || luaeval('not lvim'))
 		augroup TerminalTweaks
@@ -128,6 +131,10 @@ fu! user#general#GotoNextFloat(reverse) abort
 		endif
 	endfor
 endfunction
+
+fu! user#general#AugroupDel(group)
+	exec 'augroup '.a:group.' | au! | augroup END | augroup! '.a:group
+endfu
 
 fu! Zlua(pattern)
 	let zlua='z.lua'

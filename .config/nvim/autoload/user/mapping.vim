@@ -102,6 +102,7 @@ fu! user#mapping#resetup()
 	inoremap <M-c> <Esc>:bdelete<CR>
 	nnoremap <M-c> <C-\><C-N>:bdelete<CR>
 	nnoremap <C-s> :w<CR>
+	nnoremap g<C-s> :noau w<CR>
 
 	nnoremap <M-C-.>  <C-W>3>
 	nnoremap <M-C-,>  <C-W>3<
