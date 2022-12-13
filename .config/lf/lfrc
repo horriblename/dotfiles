@@ -413,24 +413,4 @@ map gee cd /mnt/ext
 map <m-1>
 map <m-down> push 3j
 map <m-up> push 3k
-
-cmd fastdown :push 3j
-cmd fastup :push 3k
-cmd slowscroll :{{
-   map <m-down> down
-   map <m-up> up
-   map <m-1> open
-   map <m-3> fastscroll
-}}
-
-cmd fastscroll :{{
-   map <m-down> fastdown
-   map <m-up> fastup
-   map <m-1> sync
-   map <m-3> slowscroll
-}}
-
-map sm :map <m-down> down; map <m-up> up
-map <m-3> slowscroll
-map sM :map <m-down> fastdown; map <m-up> fastup
 # }} }}
