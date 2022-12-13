@@ -43,6 +43,7 @@ fu! user#general#resetup()
 	set splitbelow splitright
 	set matchpairs+=<:>,*:*,`:`
 	set list listchars=tab:\ \ ,trail:·
+	set fillchars+=diff:╱
 
 	augroup SetListChars
 		au!

@@ -19,16 +19,19 @@ fu! user#mapping#resetup()
 	tnoremap <M-C-N> <C-\><C-n>
 	tnoremap <M-C-V> <cmd>put "<CR>
 
-	noremap H ^
-	noremap L g_
+	noremap gh ^
+	noremap gl g_
 	noremap gL g$
 	noremap gH g^
 
-	inoremap <C-l> <Right>
-	inoremap <C-j> <Down>
+	noremap! <C-h> <Left>
+	noremap! <C-l> <Right>
 	inoremap <C-k> <Up>
-	inoremap <C-h> <Left>
+	inoremap <C-j> <Down>
 
+	inoremap <C-r><C-k> <C-k>
+
+	nnoremap gV ^v$
 	xnoremap ga gg0oG$
 
 	xnoremap X "_x
@@ -49,27 +52,27 @@ fu! user#mapping#resetup()
 
 	nnoremap S :%s##gI<Left><Left><Left>
 	" surround with parenthesis. Using register "z to not interfere with clipboard
-	xmap S <Nop>
-	xnoremap S( "zs()<Esc>"zPgvlOlO<Esc>
-	xnoremap S) "zs()<Esc>"zPgvlOlO<Esc>
-	xnoremap Sb "zs()<Esc>"zPgvlOlO<Esc>
-	xnoremap S[ "zs[]<Esc>"zPgvlOlO<Esc>
-	xnoremap S] "zs[]<Esc>"zPgvlOlO<Esc>
-	xnoremap S{ "zs{}<Esc>"zPgvlOlO<Esc>
-	xnoremap S} "zs{}<Esc>"zPgvlOlO<Esc>
-	xnoremap SB "zs{}<Esc>"zPgvlOlO<Esc>
-	xnoremap S< "zs<><Esc>"zPgvlOlO<Esc>
-	xnoremap S> "zs<><Esc>"zPgvlOlO<Esc>
-	xnoremap S" "zs""<Esc>"zPgvlOlO<Esc>
-	xnoremap S' "zs''<Esc>"zPgvlOlO<Esc>
-	xnoremap S` "zs``<Esc>"zPgvlOlO<Esc>
-	xnoremap S* "zs**<Esc>"zPgvlOlO<Esc>
-	xnoremap S_ "zs__<Esc>"zPgvlOlO<Esc>
-	xnoremap Se "zs****<Left><Esc>"zPgvllOllO<Esc>
-	xnoremap SE "zs******<Left><Left><Esc>"zPgv3lO3lO<Esc>
-	xnoremap S<space> "zs<space><space><Esc>"zPgvlOlO<Esc>
+	xmap s <Nop>
+	xnoremap s( "zs()<Esc>"zPgvlOlO<Esc>
+	xnoremap s) "zs()<Esc>"zPgvlOlO<Esc>
+	xnoremap sb "zs()<Esc>"zPgvlOlO<Esc>
+	xnoremap s[ "zs[]<Esc>"zPgvlOlO<Esc>
+	xnoremap s] "zs[]<Esc>"zPgvlOlO<Esc>
+	xnoremap s{ "zs{}<Esc>"zPgvlOlO<Esc>
+	xnoremap s} "zs{}<Esc>"zPgvlOlO<Esc>
+	xnoremap sB "zs{}<Esc>"zPgvlOlO<Esc>
+	xnoremap s< "zs<><Esc>"zPgvlOlO<Esc>
+	xnoremap s> "zs<><Esc>"zPgvlOlO<Esc>
+	xnoremap s" "zs""<Esc>"zPgvlOlO<Esc>
+	xnoremap s' "zs''<Esc>"zPgvlOlO<Esc>
+	xnoremap s` "zs``<Esc>"zPgvlOlO<Esc>
+	xnoremap s* "zs**<Esc>"zPgvlOlO<Esc>
+	xnoremap s_ "zs__<Esc>"zPgvlOlO<Esc>
+	xnoremap se "zs****<Left><Esc>"zPgvllOllO<Esc>
+	xnoremap sE "zs******<Left><Left><Esc>"zPgv3lO3lO<Esc>
+	xnoremap s<space> "zs<space><space><Esc>"zPgvlOlO<Esc>
 	" single line only, `gv` highlights whole thing including surrounding tag
-	xnoremap Su "zy:let @z='<u>'..@z..'</u>'<cr>gv"zP
+	xnoremap su "zy:let @z='<u>'..@z..'</u>'<cr>gv"zP
 
 	" de-surround
 	for char in '(){}[]<>bBt"`' . "'"
