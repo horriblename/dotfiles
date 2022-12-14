@@ -10,7 +10,7 @@ endif
 augroup ColorTweaks
 	au!
 	au  ColorScheme badwolf hi Comment guifg=#aaa6a1
-	au  ColorScheme gruvbox hi Comment guifg=#a5998d
+	au  ColorScheme gruvbox hi Comment guifg=#a5998d | hi Visual gui=NONE
 augroup END
 
 try

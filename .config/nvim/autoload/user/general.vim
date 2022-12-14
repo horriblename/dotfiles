@@ -75,7 +75,10 @@ fu! user#general#resetup()
 	command! CDC cd %:p:h
 	" delete augroup
 	command! -nargs=1 AugroupDel call user#general#AugroupDel(<q-args>)
-	command! -nargs=1 -complete=file ShareVia0x0 call setreg(v:register, system('curl --silent -F"file=@"'.expand(<q-args>).' https://0x0.st'))
+	command! -addr=lines ToggleLineComments call user#general#ToggleLineCommentOnRange(<line1>, <line2>)
+	command! -nargs=1 -complete=file ShareVia0x0 
+				\ call setreg(v:register, \system('curl --silent -F"file=@"'.expand(<q-args>).' https://0x0.st')) |
+				\ echo getreg()
 
 	if has('nvim') && (!has('lua') || luaeval('not lvim'))
 		augroup TerminalTweaks
@@ -133,6 +136,58 @@ fu! user#general#GotoNextFloat(reverse) abort
 		endif
 	endfor
 endfunction
+
+fu! s:getIndentOfLength(length)
+	if &expandtab
+		return repeat(' ', a:length)
+	endif
+
+	let tabs = a:length / &tabstop
+	return repeat("\t", tabs)
+endfu
+
+fu! user#general#ToggleLineComment(lnum, indent)
+	let comm=&commentstring
+	if comm->strpart(0, 2) == '%s' || empty(comm)
+		echoerr "commentstring does not have preceding symbol or is empty"
+	endif
+
+	let exprs = comm->split("%s")
+
+	let beg_str = exprs[0]
+	let end_str = exprs->get(1, "") 
+	let beg_re = '\(' . beg_str . ' \?\)\?'
+	let end_re = '\(' . end_str . '\)\?'
+	if a:indent < 0
+		let indent_re = '^\(\s*\)' 
+	else
+		let indent_re = '^\(' . s:getIndentOfLength(a:indent) . '\)'
+	endif
+
+	let mlist = matchlist(getline(a:lnum), indent_re. beg_re . '\(.*\)' . end_re . '\(\s*\)$')
+	if !empty(mlist[2]) " beg_expr is group 2
+		" FIXME why is there more than five groups?
+		let [_, indents, _, code, _, trail; _] = mlist 
+		call setline(a:lnum, indents . code . trail)
+	else
+		let [_, indents, _, code, _, trail; _] = mlist
+		if beg_str[len(beg_str) - 1] != ' '
+			let beg_str .= ' '
+		endif
+		call setline(a:lnum, indents . beg_str . code . end_str . trail)
+	endif
+endfu
+
+fu! user#general#ToggleLineCommentOnRange(line1, line2)
+	let min_ind = indent(a:line1)
+	for lnum in range(a:line1, a:line2)
+		let min_ind = min([min_ind, lnum])
+	endfor
+
+	for lnum in range(a:line1, a:line2)
+		call user#general#ToggleLineComment(lnum, min_ind)
+	endfor
+endfu
 
 fu! user#general#AugroupDel(group)
 	exec 'augroup '.a:group.' | au! | augroup END | augroup! '.a:group
