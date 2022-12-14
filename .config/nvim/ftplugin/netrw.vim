@@ -31,6 +31,7 @@ nmap <buffer><silent> r :call netrw#Call("NetrwLocalRename", getcwd())<CR>
 nmap <buffer><silent> R :<C-U>let g:netrw_sort_direction= (g:netrw_sort_direction =~# 'n')? 'r' : 'n'<bar>e<CR>
 nmap <buffer> Z :Z 
 nmap <buffer> ? :vimgrep // **<Left><Left><Left><Left>
+nmap <buffer> S0 :ShareVia0x0 <c-r>=netrw#Call('NetrwGetWord')<cr>
 
 
 "  --------------- "
