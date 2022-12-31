@@ -52,7 +52,7 @@ fu! user#general#resetup()
 	augroup END
 
 	set wildcharm=<Tab>
-	set wildmode=longest,full
+	set wildmode=longest:full
 	set wildmenu
 
 	set cmdwinheight=4
@@ -70,7 +70,11 @@ fu! user#general#resetup()
 	command! -bar -nargs=1 -complete=customlist,ZluaComp Z call Zlua(<q-args>)
 
 	" Save file as sudo when no sudo permissions
-	command! Sudowrite execute 'write ! sudo tee %' <bar> edit!
+	if has('vim')
+		command! Sudowrite write !sudo tee % <bar> edit!
+	else " nvim
+		command! Sudowrite call s:nvimSudoWrite
+	endif
 	" CDC = Change to Directory of Current file
 	command! CDC cd %:p:h
 	" delete augroup
@@ -99,6 +103,17 @@ fu! user#general#resetup()
 endfu
 
 " function definitions {{{
+fu! s:nvimSudoWrite()
+	local askpass = tempname()
+	call assert_false(writefile([''], askpass, 's'), 'writefile (touch)')
+	call assert_true(setfperm(askpass, 'rwx------'), 'setfperm')
+	call assert_false(writefile(['#!/bin/bah', 'echo ' .. shellescape(password)], askpass, 's'))
+
+	execute 'silent write !env SUDO_ASKPASS='..shellescape(askpass) 'sudo -A tee % > /dev/null'
+
+	call assert_false(delete(askpass), 'delete')
+endfu
+
 " focus the first floating window found
 fu! user#general#GotoFirstFloat() abort
   for w in range(1, winnr('$'))
@@ -156,24 +171,31 @@ fu! user#general#ToggleLineComment(lnum, indent)
 
 	let beg_str = exprs[0]
 	let end_str = exprs->get(1, "") 
-	let beg_re = '\(' . beg_str . ' \?\)\?'
-	let end_re = '\(' . end_str . '\)\?'
+	let beg_re = '\(' . beg_str->trim() . ' \?\)\?'
+	let end_re = '\(' . end_str->trim() . '\)\?'
 	if a:indent < 0
-		let indent_re = '^\(\s*\)' 
-	else
-		let indent_re = '^\(' . s:getIndentOfLength(a:indent) . '\)'
+		let a:indent = indent(a:lnum)
 	endif
 
-	let mlist = matchlist(getline(a:lnum), indent_re. beg_re . '\(.*\)' . end_re . '\(\s*\)$')
-	if !empty(mlist[2]) " beg_expr is group 2
-		" FIXME why is there more than five groups?
-		let [_, indents, _, code, _, trail; _] = mlist 
+	let tabs = a:indent / &tabstop
+	let indent_re = escape('^((\t| {'.&tabstop.'}){'.tabs.'})', '(){}|')
+
+	let mlist = matchlist(getline(a:lnum), indent_re. beg_re . '\(.*\)' . end_re . '$')
+
+	if len(mlist) == 0
+		echo "error matching line " . a:lnum . "with indents " . a:indent
+		return
+	endif
+
+	let extra_groups = len(mlist) - 10
+
+	let [_, indents, _, cmatch_beg; rest] = mlist 
+	let code = rest[0 + extra_groups]
+	let trail = rest[2 + extra_groups]
+
+	if !empty(cmatch_beg)
 		call setline(a:lnum, indents . code . trail)
 	else
-		let [_, indents, _, code, _, trail; _] = mlist
-		if beg_str[len(beg_str) - 1] != ' '
-			let beg_str .= ' '
-		endif
 		call setline(a:lnum, indents . beg_str . code . end_str . trail)
 	endif
 endfu
@@ -181,7 +203,7 @@ endfu
 fu! user#general#ToggleLineCommentOnRange(line1, line2)
 	let min_ind = indent(a:line1)
 	for lnum in range(a:line1, a:line2)
-		let min_ind = min([min_ind, lnum])
+		let min_ind = min([min_ind, indent(lnum)])
 	endfor
 
 	for lnum in range(a:line1, a:line2)

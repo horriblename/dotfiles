@@ -1,6 +1,6 @@
 " keybindings
 " reference: https://vi.stackexchange.com/questions/22653/explicitly-call-netrw-function-in-binding
-" source code: /usr/share/nvim/runtime/autoload/netrw.vim, line 6353 onwards
+" source code: /usr/share/nvim/runtime/autoload/netrw.vim :6353 onwards
 "
 " Note that only <Plug>Functions are 'exported' and usable
 " meanwhile variables and functions that start with 's:' are scripts variables
@@ -8,8 +8,8 @@
 "
 " :help netrw-[hotkey] for more info
 "
-" TODO maybe move all these bindings to netrw_config.vim and use the
 " TODO :e was used a few times in place of a proper refresh mechanism, replace them?
+" TODO maybe move all these bindings to netrw_config.vim and use the
 " g:Netrw_UserMaps (see :help netrw-usermaps),
 " problem is, that method requires writing wrapper functions, which may not
 " be any better than just mapping the key binds here

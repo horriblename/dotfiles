@@ -6,6 +6,7 @@ set preview true
 set hidden true
 #set shell /usr/bin/sh
 #set drawbox true
+set scrolloff 3
 set incsearch true
 set incfilter true
 set icons true
@@ -37,10 +38,14 @@ cmd mkdir %{{
    mkdir "$ans" && echo "directory $ans created"
 }}
 
-cmd shareViaNullPointer %{{
-   dest=$(curl -F"file=@$f" https://0x0.st)
-   [ ! -z "$WAYLAND_DISPLAY" ] && wl-copy "$dest" || echo "$dest" | xclip -selection clipboard
-   echo $dest
+cmd shareViaNullPointer &{{
+   url=$(curl -F"file=@$f" https://0x0.st)
+   if [ -n "$WAYLAND_DISPLAY" ]; then
+		wl-copy --paste-once --trim-newline --no-fork "$url"
+	else
+		echo "$url" | xclip -selection clipboard
+	fi
+   lf -remote "send $remote echo $url"
 }}
 
 cmd new %{{
@@ -81,10 +86,16 @@ cmd sudomkfile %{{
    sudo $EDITOR $ans
 }}
 
+# NOTE: for some reason, wl-copy blocks after being called using '!'-commands
 cmd copy_location %{{
-   [ ! -z "$WAYLAND_DISPLAY" ] && wl-copy --trim-newline "$f" \
-		|| echo "$f" | xclip -selection clipboard -rmlastnl
-	echo "$f"
+   if [ -n "$WAYLAND_DISPLAY" ]; then
+		# NOTE --paste-once and --no-fork is to workaround wl-copy not exiting after copying
+		# idk how to fix
+		wl-copy --trim-newline "$f" || echo 'failed to copy location'
+	else
+		echo "$f" | xclip -selection clipboard -rmlastnl || echo 'failed to copy location'
+	fi
+   lf -remote "send $remote echo copied location to clipboard: $f"
 }}
 
 # creates a link to location (uses ABSOLUTE path) marked by copy/cut

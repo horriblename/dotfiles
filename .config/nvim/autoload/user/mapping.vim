@@ -77,13 +77,22 @@ fu! user#mapping#resetup()
 	xnoremap su "zy:let @z='<u>'..@z..'</u>'<cr>gv"zP
 
 	" de-surround
-	for char in '(){}[]<>bBt"`' . "'"
-		exec 'nnoremap ds'.char ' di'.char.'va'.char.'pgv'
+	for char in "(){}[]<>bBt\"`'"
+		exec 'nnoremap' 'ds'.char ' di'.char.'vhpgv'
 	endfor
 
 	" keyboard layout switching
 	nnoremap <leader>y :set langmap=yYzZ\\"§&/()=?`ü+öä#-Ü*ÖÄ'\\;:_;zZyY@#^&*()_+[]\\;'\\\\/{}:\\"\\|\\<\\>?<cr>
 	nnoremap <leader>z :set langmap=<cr>
+
+	" quick settings
+	nnoremap <leader>zn :set number! relativenumber!<cr>
+	nnoremap <leader>z<Tab> :set expandtab! <bar> set expandtab?<cr>
+	nnoremap <leader>zw :set wrap! <bar> set wrap?<CR>
+	" set transparency - I usually have an autocmd on ColorScheme events to set
+	" transparent background, :noau ignores the autocmd (and any other aucmd)
+	nnoremap <leader>zb :set bg=dark<CR>
+	nnoremap <leader>zB :noau set bg=dark<CR>
 
 	silent! nnoremap <unique> <leader>e :25Lexplore<CR>
 	silent! nnoremap <unique> <leader>f :find 
@@ -173,11 +182,16 @@ fu! user#mapping#resetup()
 
 	" }}}
 
-	" Cmd Win binding
-	augroup CmdWinMap
-		au!
-		au CmdwinEnter * nnoremap <buffer> <Esc> <cmd>:q<cr>
-	augroup END
+	" Abbreviations {{{
+	noreab term_red    \x1b[31m
+	noreab term_green  \x1b[32m
+	noreab term_orange \x1b[33m
+	noreab term_blue   \x1b[34m
+	noreab term_mag    \x1b[35m
+	noreab term_aqua   \x1b[26m
+	noreab term_grey   \x1b[27m
+	noreab term_reset  \x1b[0m
+	" }}}
 
 	" Plugins
 	nnoremap <silent> <leader>u :UndotreeToggle <bar> UndotreeFocus<CR>

@@ -151,8 +151,9 @@ endfunction
 
 " Copy File location
 function! netrw#custom#CopyLocation(isLocal)
-   let @"=getcwd()."/".netrw#Call('NetrwGetWord')
-   echo "copied ".@"." to clipboard"
+	let loc = getcwd()."/".netrw#Call('NetrwGetWord')
+   call setreg(v:register, loc)
+   echo "copied ".loc." to clipboard"
    return ""
 endfunction
 
