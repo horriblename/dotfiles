@@ -77,7 +77,13 @@ fu! user#mapping#resetup()
 	xnoremap su "zy:let @z='<u>'..@z..'</u>'<cr>gv"zP
 
 	" de-surround
-	for char in "(){}[]<>bBt\"`'"
+	for char in "(){}[]<>bBt"
+		exec 'nnoremap ds'.char ' di'.char.'va'.char.'pgv'
+	endfor
+
+	" quotes are single-line only, so this can work
+	" using a different keymap as `da'` could delete a whitespace
+	for char in "\"`'"
 		exec 'nnoremap' 'ds'.char ' di'.char.'vhpgv'
 	endfor
 
@@ -110,8 +116,8 @@ fu! user#mapping#resetup()
 	" Window Management {{{
 	nnoremap <leader>q :q<CR>
 	nnoremap <leader>Q :q!
-	nnoremap <leader>c :bwipeout<CR>
-	nnoremap <leader>C :bwipeout!<CR>
+	nnoremap <leader>c :bdelete<CR>
+	nnoremap <leader>C :bdelete!<CR>
 	nnoremap <M-c> :bdelete<CR>
 	inoremap <M-c> <Esc>:bdelete<CR>
 	nnoremap <M-c> <C-\><C-N>:bdelete<CR>
