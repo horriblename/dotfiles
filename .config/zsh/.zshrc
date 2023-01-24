@@ -61,8 +61,8 @@ export KEYTIMEOUT=1
 # Enable searching through history
 bindkey '^R' history-incremental-pattern-search-backward
 
-bindkey -M vicmd 'H' vi-beginning-of-line
-bindkey -M vicmd 'L' vi-end-of-line
+bindkey -M vicmd 'gh' vi-beginning-of-line
+bindkey -M vicmd 'gl' vi-end-of-line
 bindkey -M vicmd 'Y' vi-yank-eol
 
 bindkey '^[[127;5u' backward-delete-word
