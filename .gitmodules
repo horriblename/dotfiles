@@ -1,3 +1,9 @@
 [submodule ".config/nvim/.config/nvim/pack/mbbill/start/undotree"]
 	path = .config/nvim/pack/mbbill/start/undotree
 	url = https://github.com/mbbill/undotree
+[submodule "/home/py/.config/nvim/pack/markdown/start/vim-markdown"]
+	path = /home/py/.config/nvim/pack/markdown/start/vim-markdown
+	url = https://github.com/preservim/vim-markdown
+[submodule "/home/py/.config/nvim/pack/markdown/start/tabular"]
+	path = /home/py/.config/nvim/pack/markdown/start/tabular
+	url = https://github.com/godlygeek/tabular
