@@ -107,6 +107,8 @@ fu! user#mapping#resetup()
 	nnoremap <C-'><C-n> :cnext<CR>
 	nnoremap <C-'><C-p> :cprev<CR>
 	nnoremap <C-'><C-'> :copen<CR>
+	nnoremap '<C-n> :cnext<CR>
+	nnoremap '<C-p> :cprev<CR>
 
 	" toggleterm
 	noremap <M-x> :call user#general#ToggleTerm()<cr>
