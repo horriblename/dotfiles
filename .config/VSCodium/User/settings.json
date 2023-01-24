@@ -1,7 +1,6 @@
 {
     "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
-    "editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    "editor.fontSize": 18,
+    "editor.fontFamily": "'FiraCode Nerd Fonts','JetBrains Mono', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     "vscode-neovim.neovimInitVimPaths.linux": "/home/user/.config/VSCodium/User/codium-init.vim",
     "files.enableTrash": false,
     "files.autoSave": "afterDelay",
@@ -12,5 +11,6 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "editor.minimap.enabled": false
 }
