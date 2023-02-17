@@ -25,6 +25,7 @@ fu! user#general#resetup()
 	set autoindent
 	set linebreak
 	set spelllang=en,de
+	set foldlevel=99
 
 	" Tab Settings
 	set noexpandtab
@@ -73,7 +74,7 @@ fu! user#general#resetup()
 	if has('vim')
 		command! Sudowrite write !sudo tee % <bar> edit!
 	else " nvim
-		command! Sudowrite call s:nvimSudoWrite
+		command! Sudowrite call s:nvimSudoWrite()
 	endif
 	" CDC = Change to Directory of Current file
 	command! CDC cd %:p:h
@@ -104,14 +105,27 @@ endfu
 
 " function definitions {{{
 fu! s:nvimSudoWrite()
-	local askpass = tempname()
-	call assert_false(writefile([''], askpass, 's'), 'writefile (touch)')
-	call assert_true(setfperm(askpass, 'rwx------'), 'setfperm')
-	call assert_false(writefile(['#!/bin/bah', 'echo ' .. shellescape(password)], askpass, 's'))
+	redir => output
+	silent write !sudo -n tee % > /dev/null
+	redir END
 
-	execute 'silent write !env SUDO_ASKPASS='..shellescape(askpass) 'sudo -A tee % > /dev/null'
+	if empty(output)
+		edit!
+		return
+	elseif output->split('\n')->match('sudo: a password is required') == -1
+		echo output
+		echo 'write this to a temp file and move it here if you still want to proceed'
+		return
+	endif
 
-	call assert_false(delete(askpass), 'delete')
+	let password = inputsecret('sudo password: ')
+	exec printf('write !cat <(echo %s) - | sudo -S tee %s > /dev/null', shellescape(password), expand('%:p'))
+
+	edit!
+	" if we pass the password into `sudo -S tee %` when no password is
+	" required, the password will be written to the first line, this is more of
+	" a last resort in case some thing went wrong
+	call assert_true(password != getline('1'), 'something went wrong: delete the first line of your file and perhaps delete the undofile !')
 endfu
 
 " focus the first floating window found

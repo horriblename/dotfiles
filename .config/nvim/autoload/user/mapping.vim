@@ -42,7 +42,7 @@ fu! user#mapping#resetup()
 
 	" Autoclose
 	inoremap <expr> " user#autoclose#InsertSymmetric('"')
-	inoremap <expr> ' user#autoclose#InsertSymmetric("'")
+	"inoremap <expr> ' user#autoclose#InsertSymmetric("'")
 	inoremap <expr> ` user#autoclose#InsertSymmetric('`')
 	inoremap ( ()<left>
 	inoremap [ []<left>
@@ -53,6 +53,7 @@ fu! user#mapping#resetup()
 	inoremap <expr> } user#autoclose#CloseRight("}")
 
 	nnoremap S :%s##gI<Left><Left><Left>
+	xnoremap S :s##gI<Left><Left><Left>
 	" surround with parenthesis. Using register "z to not interfere with clipboard
 	xmap s <Nop>
 	xnoremap s( "zs()<Esc>"zPgvlOlO<Esc>
